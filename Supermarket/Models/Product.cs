@@ -11,7 +11,9 @@ namespace Supermarket.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,13 +21,33 @@ namespace Supermarket.Models
         {
             this.Order_Product = new HashSet<Order_Product>();
         }
-    
+
+        [Display(Name = "Product ID")]
         public System.Guid productID { get; set; }
+
+        [Display(Name = "Product name")]
+        [Required(ErrorMessage = "This Field is required")]
+        [StringLength(100)]
         public string name { get; set; }
+
+        [Display(Name = "Price")]
+        [Required(ErrorMessage = "This Field is required")]
         public decimal price { get; set; }
+
+        [Display(Name = "Product description")]
+        [Required(ErrorMessage = "This Field is required")]
         public string description { get; set; }
+
+
+        [Display(Name = "Quantity in stock")]
+        [Required(ErrorMessage = "This Field is required")]
         public int stock { get; set; }
+
+        [Display(Name = "Image name")]
+        [Required(ErrorMessage = "This Field is required")]
         public string imageURL { get; set; }
+
+        [Display(Name = "Categoty number")]
         public int category { get; set; }
     
         public virtual Category Category1 { get; set; }

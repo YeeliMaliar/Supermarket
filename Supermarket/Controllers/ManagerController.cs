@@ -17,7 +17,7 @@ namespace Supermarket.Controllers
         // GET: Manager
         public ActionResult Index()
         {
-            var products = _dbContext.Products;      //(e => e.DemoTable).Include(e => e.UserType1);
+            var products = _dbContext.Products;
             return View(products.ToList());
         }
 
@@ -31,7 +31,6 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddProduct(NewProduct newProduct)
         {
-            // save the picture, add the name to "newProductModel"
             try
             {
                 if (newProduct.picture.ContentLength > 0)
@@ -54,7 +53,7 @@ namespace Supermarket.Controllers
             catch
             {
                 ViewBag.category = new SelectList(_dbContext.Categories, "categoryID", "categoryName");
-                ViewBag.FileMessage = "File upload failed!!";
+                ViewBag.FileMessage = "failed for some reason...";
                 return View();
             }
         }
