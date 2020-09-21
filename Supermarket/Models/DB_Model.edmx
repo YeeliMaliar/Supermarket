@@ -5,6 +5,22 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="SupermarketModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="UserId" Type="uniqueidentifier" />
+        </EntityType>
+        <EntityType Name="CartItems">
+          <Key>
+            <PropertyRef Name="CartItemId" />
+          </Key>
+          <Property Name="CartItemId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="CartId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ProductId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="Category">
           <Key>
             <PropertyRef Name="categoryID" />
@@ -69,7 +85,7 @@
           <Property Name="emailAddress" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="firstName" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="lastName" Type="nvarchar" MaxLength="20" Nullable="false" />
-          <Property Name="phone" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="phone" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="passwordHash" Type="nvarchar" MaxLength="1000" Nullable="false" />
           <Property Name="passwordSalt" Type="nvarchar" MaxLength="5" Nullable="false" />
           <Property Name="usertype" Type="int" Nullable="false" />
@@ -80,6 +96,42 @@
           <Property Name="addressFloor" Type="int" />
           <Property Name="addressZip" Type="nvarchar" MaxLength="10" />
         </EntityType>
+        <Association Name="FK_Cart_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Cart" Type="Self.Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartItems_Cart">
+          <End Role="Cart" Type="Self.Cart" Multiplicity="1" />
+          <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="CartId" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="CartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartItems_Product">
+          <End Role="Product" Type="Self.Product" Multiplicity="1" />
+          <End Role="CartItems" Type="Self.CartItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="productID" />
+            </Principal>
+            <Dependent Role="CartItems">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Order-Product_Orders">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="Order-Product" Type="Self.Order-Product" Multiplicity="*" />
@@ -141,6 +193,8 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="SupermarketModelStoreContainer">
+          <EntitySet Name="Cart" EntityType="Self.Cart" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CartItems" EntityType="Self.CartItems" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Category" EntityType="Self.Category" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order-Product" EntityType="Self.Order-Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
@@ -148,6 +202,18 @@
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Cart_Users" Association="Self.FK_Cart_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Cart" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartItems_Cart" Association="Self.FK_CartItems_Cart">
+            <End Role="Cart" EntitySet="Cart" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartItems_Product" Association="Self.FK_CartItems_Product">
+            <End Role="Product" EntitySet="Product" />
+            <End Role="CartItems" EntitySet="CartItems" />
+          </AssociationSet>
           <AssociationSet Name="FK_Order-Product_Orders" Association="Self.FK_Order-Product_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="Order-Product" EntitySet="Order-Product" />
@@ -226,6 +292,7 @@
           <Property Name="category" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Category1" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
           <NavigationProperty Name="Order_Product" Relationship="Self.FK_Order_Product_Product" FromRole="Product" ToRole="Order_Product" />
+          <NavigationProperty Name="CartItems" Relationship="SupermarketModel.FK_CartItems_Product" FromRole="Product" ToRole="CartItem" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -245,7 +312,7 @@
           <Property Name="emailAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="firstName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="lastName" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="phone" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="passwordHash" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="passwordSalt" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="usertype" Type="Int32" Nullable="false" />
@@ -257,6 +324,7 @@
           <Property Name="addressApartment" Type="Int32" />
           <Property Name="addressFloor" Type="Int32" />
           <Property Name="addressZip" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Carts" Relationship="SupermarketModel.FK_Cart_Users" FromRole="User" ToRole="Cart" />
         </EntityType>
         <Association Name="FK_Product_Category">
           <End Role="Category" Type="Self.Category" Multiplicity="1" />
@@ -346,7 +414,77 @@
             <End Role="Permission" EntitySet="Permissions" />
             <End Role="Users" EntitySet="Users" />
           </AssociationSet>
+          <EntitySet Name="Carts" EntityType="SupermarketModel.Cart" />
+          <EntitySet Name="CartItems" EntityType="SupermarketModel.CartItem" />
+          <AssociationSet Name="FK_Cart_Users" Association="SupermarketModel.FK_Cart_Users">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Cart" EntitySet="Carts" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartItems_Cart" Association="SupermarketModel.FK_CartItems_Cart">
+            <End Role="Cart" EntitySet="Carts" />
+            <End Role="CartItem" EntitySet="CartItems" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CartItems_Product" Association="SupermarketModel.FK_CartItems_Product">
+            <End Role="Product" EntitySet="Products" />
+            <End Role="CartItem" EntitySet="CartItems" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="Cart">
+          <Key>
+            <PropertyRef Name="CartId" />
+          </Key>
+          <Property Name="CartId" Type="Guid" Nullable="false" />
+          <Property Name="UserId" Type="Guid" />
+          <NavigationProperty Name="User" Relationship="SupermarketModel.FK_Cart_Users" FromRole="Cart" ToRole="User" />
+          <NavigationProperty Name="CartItems" Relationship="SupermarketModel.FK_CartItems_Cart" FromRole="Cart" ToRole="CartItem" />
+        </EntityType>
+        <EntityType Name="CartItem">
+          <Key>
+            <PropertyRef Name="CartItemId" />
+          </Key>
+          <Property Name="CartItemId" Type="Guid" Nullable="false" />
+          <Property Name="CartId" Type="Guid" Nullable="false" />
+          <Property Name="ProductId" Type="Guid" Nullable="false" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Cart" Relationship="SupermarketModel.FK_CartItems_Cart" FromRole="CartItem" ToRole="Cart" />
+          <NavigationProperty Name="Product" Relationship="SupermarketModel.FK_CartItems_Product" FromRole="CartItem" ToRole="Product" />
+        </EntityType>
+        <Association Name="FK_Cart_Users">
+          <End Type="SupermarketModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="SupermarketModel.Cart" Role="Cart" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="userID" />
+            </Principal>
+            <Dependent Role="Cart">
+              <PropertyRef Name="UserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartItems_Cart">
+          <End Type="SupermarketModel.Cart" Role="Cart" Multiplicity="1" />
+          <End Type="SupermarketModel.CartItem" Role="CartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cart">
+              <PropertyRef Name="CartId" />
+            </Principal>
+            <Dependent Role="CartItem">
+              <PropertyRef Name="CartId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CartItems_Product">
+          <End Type="SupermarketModel.Product" Role="Product" Multiplicity="1" />
+          <End Type="SupermarketModel.CartItem" Role="CartItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Product">
+              <PropertyRef Name="productID" />
+            </Principal>
+            <Dependent Role="CartItem">
+              <PropertyRef Name="ProductId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -431,6 +569,24 @@
                 <ScalarProperty Name="passwordHash" ColumnName="passwordHash" />
                 <ScalarProperty Name="passwordSalt" ColumnName="passwordSalt" />
                 <ScalarProperty Name="usertype" ColumnName="usertype" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Carts">
+            <EntityTypeMapping TypeName="SupermarketModel.Cart">
+              <MappingFragment StoreEntitySet="Cart">
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CartItems">
+            <EntityTypeMapping TypeName="SupermarketModel.CartItem">
+              <MappingFragment StoreEntitySet="CartItems">
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+                <ScalarProperty Name="ProductId" ColumnName="ProductId" />
+                <ScalarProperty Name="CartId" ColumnName="CartId" />
+                <ScalarProperty Name="CartItemId" ColumnName="CartItemId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

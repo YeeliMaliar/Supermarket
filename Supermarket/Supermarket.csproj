@@ -138,6 +138,12 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Cart.cs">
+      <DependentUpon>DB_Model.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\CartItem.cs">
+      <DependentUpon>DB_Model.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Category.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
