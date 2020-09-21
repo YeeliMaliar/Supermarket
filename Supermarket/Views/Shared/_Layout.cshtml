@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - ASP.NET Application</title>
+    <style type="text/css">
+        @@font-face {
+            font-family: 'Lobster';
+            src: url(/fonts/Lobster-Regular.ttf);
+        }
+        @@font-face {
+            font-family: 'Roboto';
+            src: url(/fonts/Roboto-Regular.ttf);
+        }
+    </style>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <header>
+        @{
+            Html.RenderPartial("_HeaderNavBar");
+        }
+    </header>
+
+    <main class="body-content">
+        @RenderBody()
+    </main>
+       
+    <footer class="footer">
+        <p>&copy; @DateTime.Now.Year - ASP.NET Application</p>
+    </footer>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
