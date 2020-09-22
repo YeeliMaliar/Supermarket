@@ -10,7 +10,7 @@ using System.Configuration;
 
 namespace Supermarket.Controllers
 {
-    [Authorize(Roles = "Admin")]
+    [CustomAuthorize(Roles = "Admin")]
     public class ManagerController : Controller
     {
         SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();

@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 
 namespace Supermarket.Controllers
 {
-    [Authorize]
+    [CustomAuthorize]
     public class AccountController : Controller
     {
         private readonly SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();

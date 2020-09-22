@@ -15,6 +15,12 @@ namespace Supermarket.Controllers
         }
         public ActionResult NotFound()
         {
+            Response.StatusCode = 404;
+            return View();
+        }
+        public ActionResult AccessDenied()
+        {
+            Response.StatusCode = 403;
             return View();
         }
     }

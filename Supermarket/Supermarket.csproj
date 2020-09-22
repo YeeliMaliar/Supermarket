@@ -147,6 +147,7 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomAuthorize.cs" />
     <Compile Include="Models\DB_Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -375,6 +376,7 @@
     <Content Include="Views\ErrorHandler\NotFound.cshtml" />
     <Content Include="Views\Manager\AddProduct.cshtml" />
     <Content Include="Views\Manager\Index.cshtml" />
+    <Content Include="Views\ErrorHandler\AccessDenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
