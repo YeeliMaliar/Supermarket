@@ -210,8 +210,6 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\fontAwesome.css" />
     <Content Include="Content\PagedList.css" />
-    <Content Include="Content\productImages\milk.png" />
-    <Content Include="Content\productImages\null.png" />
     <Content Include="Content\Slide_1.png" />
     <Content Include="Content\Slide_2.png" />
     <Content Include="Content\Slide_3.png" />
@@ -400,6 +398,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\productImages\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
