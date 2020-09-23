@@ -17,6 +17,10 @@ namespace Supermarket.Controllers
         // GET: Manager
         public ActionResult Index()
         {
+            return View();
+        }
+        public ActionResult Products()
+        {
             var products = _dbContext.Products;
             return View(products.ToList());
         }
@@ -48,7 +52,7 @@ namespace Supermarket.Controllers
                 newProduct.product.category = newProduct.category;
                 _dbContext.Products.Add(newProduct.product);
                 _dbContext.SaveChanges();
-                return RedirectToAction("Index", "Manager");
+                return RedirectToAction("Products", "Manager");
             }
             catch
             {

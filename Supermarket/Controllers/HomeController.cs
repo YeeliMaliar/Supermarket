@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Data;
+using System.Data.Entity;
 using System.Web.Mvc;
 using System.Web.Security;
 using Supermarket.Models;
@@ -13,7 +15,7 @@ namespace Supermarket.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
+        private SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
 
         public ActionResult Index()
         {
