@@ -34,5 +34,7 @@ namespace Supermarket.Models
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Cart> Carts { get; set; }
         public virtual DbSet<CartItem> CartItems { get; set; }
+        public virtual DbSet<Address> Addresses { get; set; }
+        public virtual DbSet<ProductImage> ProductImages { get; set; }
     }
 }

@@ -22,30 +22,21 @@ namespace Supermarket.Models
             this.Orders = new HashSet<Order>();
             this.Carts = new HashSet<Cart>();
         }
-
         [Display(Name = "User ID")]
         public System.Guid userID { get; set; }
-
-
         [Display(Name = "Email")]
         [Required(ErrorMessage = "This Field is required")]
         [EmailAddress(ErrorMessage = "Email address must be valid")]
         [StringLength(50)]
         public string emailAddress { get; set; }
-
-
         [Display(Name = "First name")]
         [Required(ErrorMessage = "This Field is required")]
         [StringLength(20)]
         public string firstName { get; set; }
-
-
         [Display(Name = "Last name")]
         [Required(ErrorMessage = "This Field is required")]
         [StringLength(20)]
         public string lastName { get; set; }
-
-
         [Display(Name = "Phone number")]
         [Required(ErrorMessage = "This Field is required")]
         [Phone(ErrorMessage = "phone number must be valid")]
@@ -53,35 +44,16 @@ namespace Supermarket.Models
         public string passwordHash { get; set; }
         public string passwordSalt { get; set; }
         public int usertype { get; set; }
-        [Display(Name = "City")]
-        [Required(ErrorMessage = "This Field is required")]
-        [StringLength(50, ErrorMessage = "The city name can't contain more than 50 letters")]
-        public string addressCity { get; set; }
-        [Display(Name = "Street")]
-        [Required(ErrorMessage = "This Field is required")]
-        [StringLength(50, ErrorMessage = "The street name can't contain more than 50 letters")]
-        public string addressStreet { get; set; }
-        [Display(Name = "House number")]
-        [Required(ErrorMessage = "This Field is required")]
-        [Range(0, 500, ErrorMessage = "The house number can't be negative or higher than 500")]
-        public int addressHouse { get; set; }
-        [Display(Name = "apartment")]
-        [Range(0, 400, ErrorMessage = "The apartment number can't be negative or higher than 400")]
-        public Nullable<int> addressApartment { get; set; }
-        [Display(Name = "floor")]
-        [Range(0, 100, ErrorMessage = "The floor number can't be negative or higher than 100")]
-        public Nullable<int> addressFloor { get; set; }
 
-        [Display(Name = "Postal code")]
+        [Display(Name = "Address ID")]
         [Required(ErrorMessage = "This Field is required")]
-        [StringLength(7, ErrorMessage = "Postal code length can't be more than 7 numbers")]
-        [RegularExpression(@"\d{7}", ErrorMessage = "Postal code must contain numbers only and can't be longer than 7 digits")]
-        public string addressZip { get; set; }
+        public System.Guid addressID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
         public virtual Permission Permission { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Carts { get; set; }
+        public virtual Address Address { get; set; }
     }
 }
