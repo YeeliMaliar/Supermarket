@@ -17,6 +17,8 @@ namespace Supermarket.Models
         public System.Guid ImageID { get; set; }
         public System.Guid productID { get; set; }
         public string imageName { get; set; }
+        public System.DateTime UploadDate { get; set; }
+        public int orderValue { get; set; }
     
         public virtual Product Product { get; set; }
     }

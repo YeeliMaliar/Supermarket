@@ -48,7 +48,7 @@ namespace Supermarket.Models
         [Display(Name = "Address ID")]
         [Required(ErrorMessage = "This Field is required")]
         public System.Guid addressID { get; set; }
-    
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
         public virtual Permission Permission { get; set; }

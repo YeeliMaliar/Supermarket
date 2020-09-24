@@ -64,18 +64,26 @@ namespace Supermarket.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Register(RegisterModel registerUser)
         {
-            if (ModelState.IsValid) //whut?
+            if (ModelState.IsValid) //update it to add address and user
             {
+                //check if the email is free
                 bool UserExsist = _dbContext.Users
-               .Any(u => u.emailAddress == registerUser.User.emailAddress);
+               .Any(u => u.emailAddress == registerUser.User.emailAddress); // the email is free
                 if (!UserExsist)
                 {
+                    // give the address an id and add it to the db
+                    registerUser.Address.addressID = Guid.NewGuid();
+                    _dbContext.Addresses.Add(registerUser.Address);
+
+                    // set some parameters to the user and add it to the db
                     registerUser.User.passwordSalt = getSalt();
                     registerUser.User.passwordHash = getHash(registerUser.password, registerUser.User.passwordSalt);
                     registerUser.User.userID = Guid.NewGuid();
+                    registerUser.User.addressID = registerUser.Address.addressID;
                     registerUser.User.usertype = 1;
-                    //check email shit...
                     _dbContext.Users.Add(registerUser.User);
+
+                    // save, log in and return to the home page
                     _dbContext.SaveChanges();
                     FormsAuthentication.SetAuthCookie(registerUser.User.emailAddress, false);
                     return RedirectToAction("Index", "Home");
@@ -88,7 +96,7 @@ namespace Supermarket.Controllers
             }
             else
             {
-                ViewBag.message = "";
+                //ViewBag.message = "";
                 return View();
             }
         }

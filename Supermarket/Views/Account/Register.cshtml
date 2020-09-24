@@ -40,38 +40,38 @@
 
         <div class="row">
             <div class="form-group form-field">
-                @Html.LabelFor(model => model.User.addressCity, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.User.addressCity, new { htmlAttributes = new { @class = "form-control text-form-editor" } })
-                @Html.ValidationMessageFor(model => model.User.addressCity, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Address.city, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Address.city, new { htmlAttributes = new { @class = "form-control text-form-editor" } })
+                @Html.ValidationMessageFor(model => model.Address.city, "", new { @class = "text-danger" })
             </div>
             <div class="form-group form-field">
-                @Html.LabelFor(model => model.User.addressStreet, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.User.addressStreet, new { htmlAttributes = new { @class = "form-control text-form-editor" } })
-                @Html.ValidationMessageFor(model => model.User.addressStreet, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Address.street, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Address.street, new { htmlAttributes = new { @class = "form-control text-form-editor" } })
+                @Html.ValidationMessageFor(model => model.Address.street, "", new { @class = "text-danger" })
             </div>
         </div>
         <div class="row">
             <div class="form-group form-field">
-                @Html.LabelFor(model => model.User.addressHouse, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.User.addressHouse, new { htmlAttributes = new { @class = "form-control number-form-editor", min = 0, max = 500 } })
-                @Html.ValidationMessageFor(model => model.User.addressHouse, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Address.houseNumber, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Address.houseNumber, new { htmlAttributes = new { @class = "form-control number-form-editor", min = 0, max = 500 } })
+                @Html.ValidationMessageFor(model => model.Address.houseNumber, "", new { @class = "text-danger" })
             </div>
             <div class="form-group form-field">
-                @Html.LabelFor(model => model.User.addressFloor, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.User.addressFloor, new { htmlAttributes = new { @class = "form-control number-form-editor", min = 0, max = 100 } })
-                @Html.ValidationMessageFor(model => model.User.addressFloor, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Address.floor, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Address.floor, new { htmlAttributes = new { @class = "form-control number-form-editor", min = 0, max = 100 } })
+                @Html.ValidationMessageFor(model => model.Address.floor, "", new { @class = "text-danger" })
             </div>
             <div class="form-group form-field">
-                @Html.LabelFor(model => model.User.addressApartment, htmlAttributes: new { @class = "control-label" })
-                @Html.EditorFor(model => model.User.addressApartment, new { htmlAttributes = new { @class = "form-control number-form-editor", min = 0, max = 400 } })
-                @Html.ValidationMessageFor(model => model.User.addressApartment, "", new { @class = "text-danger" })
+                @Html.LabelFor(model => model.Address.apartment, htmlAttributes: new { @class = "control-label" })
+                @Html.EditorFor(model => model.Address.apartment, new { htmlAttributes = new { @class = "form-control number-form-editor", min = 0, max = 400 } })
+                @Html.ValidationMessageFor(model => model.Address.apartment, "", new { @class = "text-danger" })
             </div>
         </div>
 
          <div class="form-group form-field">
-            @Html.LabelFor(model => model.User.addressZip, htmlAttributes: new { @class = "control-label" })
-            @Html.EditorFor(model => model.User.addressZip, new { htmlAttributes = new { @class = "form-control" } })
-            @Html.ValidationMessageFor(model => model.User.addressZip, "", new { @class = "text-danger" })
+            @Html.LabelFor(model => model.Address.postalCode, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Address.postalCode, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Address.postalCode, "", new { @class = "text-danger" })
         </div>
 
         <div class="form-group form-field">

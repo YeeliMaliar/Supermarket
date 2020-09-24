@@ -43,13 +43,13 @@
         </EntityType>
         <EntityType Name="Order-Product">
           <Key>
-            <PropertyRef Name="orderID" />
-            <PropertyRef Name="productID" />
+            <PropertyRef Name="orderProductID" />
           </Key>
           <Property Name="orderID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="productID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="quantity" Type="int" Nullable="false" />
           <Property Name="unitPrice" Type="money" Nullable="false" />
+          <Property Name="orderProductID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="Orders">
           <Key>
@@ -74,9 +74,8 @@
           <Property Name="productID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="name" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="price" Type="smallmoney" Nullable="false" />
-          <Property Name="description" Type="nvarchar" MaxLength="1000" />
+          <Property Name="description" Type="text" />
           <Property Name="stock" Type="int" Nullable="false" />
-          <Property Name="imageID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="category" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="ProductImage">
@@ -86,6 +85,8 @@
           <Property Name="ImageID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="productID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="imageName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="UploadDate" Type="date" Nullable="false" />
+          <Property Name="orderValue" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -299,8 +300,7 @@
         </EntityType>
         <EntityType Name="Order_Product">
           <Key>
-            <PropertyRef Name="orderID" />
-            <PropertyRef Name="productID" />
+            <PropertyRef Name="orderProductID" />
           </Key>
           <Property Name="orderID" Type="Guid" Nullable="false" />
           <Property Name="productID" Type="Guid" Nullable="false" />
@@ -308,6 +308,7 @@
           <Property Name="unitPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
           <NavigationProperty Name="Order" Relationship="Self.FK_Order_Product_Orders" FromRole="Order_Product" ToRole="Orders" />
           <NavigationProperty Name="Product" Relationship="Self.FK_Order_Product_Product" FromRole="Order_Product" ToRole="Product" />
+          <Property Name="orderProductID" Type="Guid" Nullable="false" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
@@ -335,13 +336,12 @@
           <Property Name="productID" Type="Guid" Nullable="false" />
           <Property Name="name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="price" Type="Decimal" Precision="10" Scale="4" Nullable="false" />
-          <Property Name="description" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="stock" Type="Int32" Nullable="false" />
           <Property Name="category" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Category1" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
           <NavigationProperty Name="Order_Product" Relationship="Self.FK_Order_Product_Product" FromRole="Product" ToRole="Order_Product" />
           <NavigationProperty Name="CartItems" Relationship="SupermarketModel.FK_CartItems_Product" FromRole="Product" ToRole="CartItem" />
-          <Property Name="imageID" Type="Guid" Nullable="false" />
           <NavigationProperty Name="ProductImages" Relationship="SupermarketModel.FK_Image_Product" FromRole="Product" ToRole="ProductImage" />
         </EntityType>
         <EntityType Name="sysdiagram">
@@ -562,6 +562,8 @@
           <Property Name="productID" Type="Guid" Nullable="false" />
           <Property Name="imageName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Product" Relationship="SupermarketModel.FK_Image_Product" FromRole="ProductImage" ToRole="Product" />
+          <Property Name="UploadDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="orderValue" Type="Int32" Nullable="false" />
         </EntityType>
         <Association Name="FK_Users_Address">
           <End Type="SupermarketModel.Address" Role="Address" Multiplicity="1" />
@@ -605,6 +607,7 @@
           <EntitySetMapping Name="Order_Product">
             <EntityTypeMapping TypeName="SupermarketModel.Order_Product">
               <MappingFragment StoreEntitySet="Order-Product">
+                <ScalarProperty Name="orderProductID" ColumnName="orderProductID" />
                 <ScalarProperty Name="orderID" ColumnName="orderID" />
                 <ScalarProperty Name="productID" ColumnName="productID" />
                 <ScalarProperty Name="quantity" ColumnName="quantity" />
@@ -633,7 +636,6 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="SupermarketModel.Product">
               <MappingFragment StoreEntitySet="Product">
-                <ScalarProperty Name="imageID" ColumnName="imageID" />
                 <ScalarProperty Name="productID" ColumnName="productID" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="price" ColumnName="price" />
@@ -703,6 +705,8 @@
           <EntitySetMapping Name="ProductImages">
             <EntityTypeMapping TypeName="SupermarketModel.ProductImage">
               <MappingFragment StoreEntitySet="ProductImage">
+                <ScalarProperty Name="orderValue" ColumnName="orderValue" />
+                <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
                 <ScalarProperty Name="imageName" ColumnName="imageName" />
                 <ScalarProperty Name="productID" ColumnName="productID" />
                 <ScalarProperty Name="ImageID" ColumnName="ImageID" />

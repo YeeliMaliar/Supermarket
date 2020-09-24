@@ -11,6 +11,8 @@ namespace Supermarket.Models
         [Required]
         public User User { get; set; }
 
+        public Address Address { get; set; }
+
         [Required(ErrorMessage = "This field is required")]
         [StringLength(100)]
         [Display(Name = "Password")]
