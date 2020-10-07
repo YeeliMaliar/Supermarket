@@ -157,7 +157,7 @@
     <Compile Include="Models\Category.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\CustomAuthorize.cs" />
+    <Compile Include="Helper\CustomAuthorize.cs" />
     <Compile Include="Models\DB_Model.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -198,7 +198,7 @@
     <Compile Include="Models\User.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\UserRoleProvider.cs" />
+    <Compile Include="Helper\UserRoleProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

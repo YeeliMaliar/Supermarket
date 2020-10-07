@@ -21,8 +21,8 @@ namespace Supermarket.Models
         {
             this.Order_Product = new HashSet<Order_Product>();
             this.CartItems = new HashSet<CartItem>();
-            this.ProductImages = new HashSet<ProductImage>();
         }
+
         [Display(Name = "Product ID")]
         public System.Guid productID { get; set; }
         [Display(Name = "Product name")]
@@ -39,14 +39,13 @@ namespace Supermarket.Models
         public int stock { get; set; }
         [Display(Name = "Categoty number")]
         public int category { get; set; }
-        public System.Guid imageID { get; set; }
-
+        public System.Guid ImageID { get; set; }
+    
         public virtual Category Category1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_Product> Order_Product { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<CartItem> CartItems { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ProductImage> ProductImages { get; set; }
+        public virtual ProductImage ProductImage { get; set; }
     }
 }

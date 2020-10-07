@@ -7,6 +7,8 @@ using System.Web.Mvc;
 using System.Web.Security;
 using Supermarket.Models;
 using System.Configuration;
+using System.Net;
+using System.Web.Mvc.Ajax;
 
 namespace Supermarket.Controllers
 {
@@ -56,7 +58,7 @@ namespace Supermarket.Controllers
                     // create a new image item and it's ID
                     ProductImage newImage = new ProductImage();
                     newImage.ImageID = Guid.NewGuid();
-                    newImage.orderValue = 1;
+                    
 
                     // create a new filename ( name_ImageID.ext)
                     string myfile = name + "_" + newImage.ImageID + _Ext;
@@ -72,11 +74,12 @@ namespace Supermarket.Controllers
                     newProduct.product.productID = Guid.NewGuid();
 
                     //set the images product to the new product, then adds it to the db
-                    newImage.productID = newProduct.product.productID;
                     _dbContext.ProductImages.Add(newImage);
 
                     //save the picture in the server
                     newProduct.picture.SaveAs(_path);
+
+                    newProduct.product.ImageID = newImage.ImageID;
 
                     //set the new products category, than add the product to the db
                     newProduct.product.category = newProduct.category;
@@ -110,5 +113,6 @@ namespace Supermarket.Controllers
                 return RedirectToAction("Products", "Manager");
             }
         }
+
     }
 }

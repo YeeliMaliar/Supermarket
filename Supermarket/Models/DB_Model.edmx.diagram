@@ -23,9 +23,9 @@
         <AssociationConnector Association="SupermarketModel.FK_CartItems_Cart" />
         <AssociationConnector Association="SupermarketModel.FK_CartItems_Product" />
         <EntityTypeShape EntityType="SupermarketModel.Address" Width="1.5" PointX="0.75" PointY="2.625" />
-        <EntityTypeShape EntityType="SupermarketModel.ProductImage" Width="1.5" PointX="14.5" PointY="3.375" />
+        <EntityTypeShape EntityType="SupermarketModel.ProductImage" Width="1.5" PointX="16.125" PointY="3.375" />
         <AssociationConnector Association="SupermarketModel.FK_Users_Address" />
-        <AssociationConnector Association="SupermarketModel.FK_Image_Product" />
+        <AssociationConnector Association="SupermarketModel.FK_Product_ProductImage" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

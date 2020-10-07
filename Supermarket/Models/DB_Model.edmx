@@ -77,16 +77,16 @@
           <Property Name="description" Type="text" />
           <Property Name="stock" Type="int" Nullable="false" />
           <Property Name="category" Type="int" Nullable="false" />
+          <Property Name="ImageID" Type="uniqueidentifier" Nullable="false" />
         </EntityType>
         <EntityType Name="ProductImage">
           <Key>
             <PropertyRef Name="ImageID" />
           </Key>
           <Property Name="ImageID" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="productID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="imageName" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="UploadDate" Type="date" Nullable="false" />
-          <Property Name="orderValue" Type="int" Nullable="false" />
+          <Property Name="imageType" Type="nvarchar" MaxLength="10" Nullable="false" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -148,18 +148,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Image_Product">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="productID" />
-            </Principal>
-            <Dependent Role="ProductImage">
-              <PropertyRef Name="productID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_Order-Product_Orders">
           <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
           <End Role="Order-Product" Type="Self.Order-Product" Multiplicity="*" />
@@ -205,6 +193,18 @@
             </Principal>
             <Dependent Role="Product">
               <PropertyRef Name="category" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Product_ProductImage">
+          <End Role="ProductImage" Type="Self.ProductImage" Multiplicity="1" />
+          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProductImage">
+              <PropertyRef Name="ImageID" />
+            </Principal>
+            <Dependent Role="Product">
+              <PropertyRef Name="ImageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -256,10 +256,6 @@
             <End Role="Product" EntitySet="Product" />
             <End Role="CartItems" EntitySet="CartItems" />
           </AssociationSet>
-          <AssociationSet Name="FK_Image_Product" Association="Self.FK_Image_Product">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="ProductImage" EntitySet="ProductImage" />
-          </AssociationSet>
           <AssociationSet Name="FK_Order-Product_Orders" Association="Self.FK_Order-Product_Orders">
             <End Role="Orders" EntitySet="Orders" />
             <End Role="Order-Product" EntitySet="Order-Product" />
@@ -274,6 +270,10 @@
           </AssociationSet>
           <AssociationSet Name="FK_Product_Category" Association="Self.FK_Product_Category">
             <End Role="Category" EntitySet="Category" />
+            <End Role="Product" EntitySet="Product" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Product_ProductImage" Association="Self.FK_Product_ProductImage">
+            <End Role="ProductImage" EntitySet="ProductImage" />
             <End Role="Product" EntitySet="Product" />
           </AssociationSet>
           <AssociationSet Name="FK_Users_Address" Association="Self.FK_Users_Address">
@@ -342,7 +342,8 @@
           <NavigationProperty Name="Category1" Relationship="Self.FK_Product_Category" FromRole="Product" ToRole="Category" />
           <NavigationProperty Name="Order_Product" Relationship="Self.FK_Order_Product_Product" FromRole="Product" ToRole="Order_Product" />
           <NavigationProperty Name="CartItems" Relationship="SupermarketModel.FK_CartItems_Product" FromRole="Product" ToRole="CartItem" />
-          <NavigationProperty Name="ProductImages" Relationship="SupermarketModel.FK_Image_Product" FromRole="Product" ToRole="ProductImage" />
+          <Property Name="ImageID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="ProductImage" Relationship="SupermarketModel.FK_Product_ProductImage" FromRole="Product" ToRole="ProductImage" />
         </EntityType>
         <EntityType Name="sysdiagram">
           <Key>
@@ -480,9 +481,9 @@
             <End Role="Address" EntitySet="Addresses" />
             <End Role="User" EntitySet="Users" />
           </AssociationSet>
-          <AssociationSet Name="FK_Image_Product" Association="SupermarketModel.FK_Image_Product">
-            <End Role="Product" EntitySet="Products" />
+          <AssociationSet Name="FK_Product_ProductImage" Association="SupermarketModel.FK_Product_ProductImage">
             <End Role="ProductImage" EntitySet="ProductImages" />
+            <End Role="Product" EntitySet="Products" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Cart">
@@ -559,11 +560,10 @@
             <PropertyRef Name="ImageID" />
           </Key>
           <Property Name="ImageID" Type="Guid" Nullable="false" />
-          <Property Name="productID" Type="Guid" Nullable="false" />
           <Property Name="imageName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Product" Relationship="SupermarketModel.FK_Image_Product" FromRole="ProductImage" ToRole="Product" />
           <Property Name="UploadDate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="orderValue" Type="Int32" Nullable="false" />
+          <Property Name="imageType" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Products" Relationship="SupermarketModel.FK_Product_ProductImage" FromRole="ProductImage" ToRole="Product" />
         </EntityType>
         <Association Name="FK_Users_Address">
           <End Type="SupermarketModel.Address" Role="Address" Multiplicity="1" />
@@ -577,15 +577,15 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Image_Product">
-          <End Type="SupermarketModel.Product" Role="Product" Multiplicity="1" />
-          <End Type="SupermarketModel.ProductImage" Role="ProductImage" Multiplicity="*" />
+        <Association Name="FK_Product_ProductImage">
+          <End Type="SupermarketModel.ProductImage" Role="ProductImage" Multiplicity="1" />
+          <End Type="SupermarketModel.Product" Role="Product" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Product">
-              <PropertyRef Name="productID" />
+            <Principal Role="ProductImage">
+              <PropertyRef Name="ImageID" />
             </Principal>
-            <Dependent Role="ProductImage">
-              <PropertyRef Name="productID" />
+            <Dependent Role="Product">
+              <PropertyRef Name="ImageID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -636,6 +636,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="SupermarketModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ImageID" ColumnName="ImageID" />
                 <ScalarProperty Name="productID" ColumnName="productID" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="price" ColumnName="price" />
@@ -705,10 +706,9 @@
           <EntitySetMapping Name="ProductImages">
             <EntityTypeMapping TypeName="SupermarketModel.ProductImage">
               <MappingFragment StoreEntitySet="ProductImage">
-                <ScalarProperty Name="orderValue" ColumnName="orderValue" />
+                <ScalarProperty Name="imageType" ColumnName="imageType" />
                 <ScalarProperty Name="UploadDate" ColumnName="UploadDate" />
                 <ScalarProperty Name="imageName" ColumnName="imageName" />
-                <ScalarProperty Name="productID" ColumnName="productID" />
                 <ScalarProperty Name="ImageID" ColumnName="ImageID" />
               </MappingFragment>
             </EntityTypeMapping>

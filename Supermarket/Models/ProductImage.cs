@@ -14,12 +14,18 @@ namespace Supermarket.Models
     
     public partial class ProductImage
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public ProductImage()
+        {
+            this.Products = new HashSet<Product>();
+        }
+    
         public System.Guid ImageID { get; set; }
-        public System.Guid productID { get; set; }
         public string imageName { get; set; }
         public System.DateTime UploadDate { get; set; }
-        public int orderValue { get; set; }
+        public string imageType { get; set; }
     
-        public virtual Product Product { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
