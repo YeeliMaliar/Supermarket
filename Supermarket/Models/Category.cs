@@ -22,8 +22,9 @@ namespace Supermarket.Models
     
         public int categoryID { get; set; }
         public string categoryName { get; set; }
-        public string categoryImageName { get; set; }
+        public Nullable<System.Guid> categoryImage { get; set; }
     
+        public virtual ProductImage ProductImage { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
     }

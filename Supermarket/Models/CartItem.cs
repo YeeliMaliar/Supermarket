@@ -15,9 +15,9 @@ namespace Supermarket.Models
     public partial class CartItem
     {
         public System.Guid CartItemId { get; set; }
-        public System.Guid CartId { get; set; }
         public System.Guid ProductId { get; set; }
         public int Quantity { get; set; }
+        public Nullable<long> CartID { get; set; }
     
         public virtual Cart Cart { get; set; }
         public virtual Product Product { get; set; }

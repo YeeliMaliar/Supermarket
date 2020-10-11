@@ -20,8 +20,8 @@ namespace Supermarket.Models
             this.CartItems = new HashSet<CartItem>();
         }
     
-        public System.Guid CartId { get; set; }
-        public Nullable<System.Guid> UserId { get; set; }
+        public long CartID { get; set; }
+        public System.Guid UserId { get; set; }
     
         public virtual User User { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

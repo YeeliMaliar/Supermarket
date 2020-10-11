@@ -11,49 +11,31 @@ namespace Supermarket.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class User
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.Orders = new HashSet<Order>();
             this.Carts = new HashSet<Cart>();
+            this.Orders = new HashSet<Order>();
         }
-        [Display(Name = "User ID")]
+    
         public System.Guid userID { get; set; }
-        [Display(Name = "Email")]
-        [Required(ErrorMessage = "This Field is required")]
-        [EmailAddress(ErrorMessage = "Email address must be valid")]
-        [StringLength(50)]
         public string emailAddress { get; set; }
-        [Display(Name = "First name")]
-        [Required(ErrorMessage = "This Field is required")]
-        [StringLength(20)]
         public string firstName { get; set; }
-        [Display(Name = "Last name")]
-        [Required(ErrorMessage = "This Field is required")]
-        [StringLength(20)]
         public string lastName { get; set; }
-        [Display(Name = "Phone number")]
-        [Required(ErrorMessage = "This Field is required")]
-        [Phone(ErrorMessage = "phone number must be valid")]
         public string phone { get; set; }
         public string passwordHash { get; set; }
         public string passwordSalt { get; set; }
         public int usertype { get; set; }
-
-        [Display(Name = "Address ID")]
-        [Required(ErrorMessage = "This Field is required")]
         public System.Guid addressID { get; set; }
-
+    
+        public virtual Address Address { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cart> Carts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
         public virtual Permission Permission { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cart> Carts { get; set; }
-        public virtual Address Address { get; set; }
     }
 }

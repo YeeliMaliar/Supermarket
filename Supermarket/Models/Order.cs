@@ -20,10 +20,10 @@ namespace Supermarket.Models
             this.Order_Product = new HashSet<Order_Product>();
         }
     
-        public System.Guid orderID { get; set; }
         public System.Guid userID { get; set; }
         public System.DateTime checkoutTime { get; set; }
         public decimal checkoutTotal { get; set; }
+        public long orderId { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_Product> Order_Product { get; set; }

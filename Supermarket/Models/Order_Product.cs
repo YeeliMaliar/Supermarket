@@ -14,11 +14,11 @@ namespace Supermarket.Models
     
     public partial class Order_Product
     {
-        public System.Guid orderID { get; set; }
         public System.Guid productID { get; set; }
         public int quantity { get; set; }
         public decimal unitPrice { get; set; }
         public System.Guid orderProductID { get; set; }
+        public long orderId { get; set; }
     
         public virtual Order Order { get; set; }
         public virtual Product Product { get; set; }

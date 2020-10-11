@@ -17,6 +17,7 @@ namespace Supermarket.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public ProductImage()
         {
+            this.Categories = new HashSet<Category>();
             this.Products = new HashSet<Product>();
         }
     
@@ -25,6 +26,8 @@ namespace Supermarket.Models
         public System.DateTime UploadDate { get; set; }
         public string imageType { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Category> Categories { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Product> Products { get; set; }
     }

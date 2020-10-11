@@ -4,27 +4,28 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="5c1937e66e6741a5b4423c0124d1f805" Name="Diagram1" ZoomLevel="96">
-        <EntityTypeShape EntityType="SupermarketModel.Category" Width="1.5" PointX="14.5" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SupermarketModel.Order_Product" Width="1.5" PointX="8.75" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SupermarketModel.Order" Width="1.5" PointX="5.5" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SupermarketModel.Permission" Width="1.5" PointX="0.75" PointY="0.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="SupermarketModel.Product" Width="1.5" PointX="12.25" PointY="1.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="SupermarketModel.sysdiagram" Width="1.5" PointX="12.125" PointY="5" IsExpanded="false" />
-        <EntityTypeShape EntityType="SupermarketModel.User" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
-        <AssociationConnector Association="SupermarketModel.FK_Product_Category" ManuallyRouted="false" />
-        <AssociationConnector Association="SupermarketModel.FK_Order_Product_Orders" ManuallyRouted="false" />
-        <AssociationConnector Association="SupermarketModel.FK_Order_Product_Product" ManuallyRouted="false" />
-        <AssociationConnector Association="SupermarketModel.FK_Orders_Users" ManuallyRouted="false" />
-        <AssociationConnector Association="SupermarketModel.FK_Users_Permission" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="SupermarketModel.Cart" Width="1.5" PointX="5.375" PointY="3.5" />
-        <EntityTypeShape EntityType="SupermarketModel.CartItem" Width="1.5" PointX="8.75" PointY="3.25" />
+      <Diagram DiagramId="5c1937e66e6741a5b4423c0124d1f805" Name="Diagram1" ZoomLevel="89">
+        <EntityTypeShape EntityType="SupermarketModel.Address" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="SupermarketModel.Cart" Width="1.5" PointX="5.25" PointY="5.625" />
+        <EntityTypeShape EntityType="SupermarketModel.CartItem" Width="1.5" PointX="7.5" PointY="6.375" />
+        <EntityTypeShape EntityType="SupermarketModel.Category" Width="1.5" PointX="3" PointY="8.75" />
+        <EntityTypeShape EntityType="SupermarketModel.Order_Product" Width="1.5" PointX="7.5" PointY="2.625" />
+        <EntityTypeShape EntityType="SupermarketModel.Order" Width="1.5" PointX="5.25" PointY="2.625" />
+        <EntityTypeShape EntityType="SupermarketModel.Permission" Width="1.5" PointX="0.75" PointY="4.25" />
+        <EntityTypeShape EntityType="SupermarketModel.Product" Width="1.5" PointX="5.25" PointY="8.25" />
+        <EntityTypeShape EntityType="SupermarketModel.ProductImage" Width="1.5" PointX="0.75" PointY="8.625" />
+        <EntityTypeShape EntityType="SupermarketModel.sysdiagram" Width="1.5" PointX="7.75" PointY="10" />
+        <EntityTypeShape EntityType="SupermarketModel.User" Width="1.5" PointX="3" PointY="3.25" />
+        <AssociationConnector Association="SupermarketModel.FK_Users_Address" />
         <AssociationConnector Association="SupermarketModel.FK_Cart_Users" />
         <AssociationConnector Association="SupermarketModel.FK_CartItems_Cart" />
         <AssociationConnector Association="SupermarketModel.FK_CartItems_Product" />
-        <EntityTypeShape EntityType="SupermarketModel.Address" Width="1.5" PointX="0.75" PointY="2.625" />
-        <EntityTypeShape EntityType="SupermarketModel.ProductImage" Width="1.5" PointX="16.125" PointY="3.375" />
-        <AssociationConnector Association="SupermarketModel.FK_Users_Address" />
+        <AssociationConnector Association="SupermarketModel.FK_Category_ProductImage" />
+        <AssociationConnector Association="SupermarketModel.FK_Product_Category" />
+        <AssociationConnector Association="SupermarketModel.FK_Order_Product_Orders" />
+        <AssociationConnector Association="SupermarketModel.FK_Order_Product_Product" />
+        <AssociationConnector Association="SupermarketModel.FK_Orders_Users" />
+        <AssociationConnector Association="SupermarketModel.FK_Users_Permission" />
         <AssociationConnector Association="SupermarketModel.FK_Product_ProductImage" />
       </Diagram>
     </edmx:Diagrams>

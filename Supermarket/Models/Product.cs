@@ -11,41 +11,29 @@ namespace Supermarket.Models
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel.DataAnnotations.Schema;
-
+    
     public partial class Product
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
-            this.Order_Product = new HashSet<Order_Product>();
             this.CartItems = new HashSet<CartItem>();
+            this.Order_Product = new HashSet<Order_Product>();
         }
-
-        [Display(Name = "Product ID")]
+    
         public System.Guid productID { get; set; }
-        [Display(Name = "Product name")]
-        [Required(ErrorMessage = "This Field is required")]
-        [StringLength(100)]
         public string name { get; set; }
-        [Display(Name = "Price")]
-        [Required(ErrorMessage = "This Field is required")]
         public decimal price { get; set; }
-        [Display(Name = "Product description")]
         public string description { get; set; }
-        [Display(Name = "Quantity in stock")]
-        [Required(ErrorMessage = "This Field is required")]
         public int stock { get; set; }
-        [Display(Name = "Categoty number")]
         public int category { get; set; }
         public System.Guid ImageID { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<CartItem> CartItems { get; set; }
         public virtual Category Category1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_Product> Order_Product { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CartItem> CartItems { get; set; }
         public virtual ProductImage ProductImage { get; set; }
     }
 }
