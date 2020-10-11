@@ -1,72 +1,177 @@
 ﻿
 @model PagedList.IPagedList<Supermarket.Models.Product>
-@using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
 @{
     ViewBag.Title = "Shop";
 }
 
-<h2>Products, change design later...</h2>
+<h1>Our Products:</h1>
 
-@using (Html.BeginForm("Index", "Shop", FormMethod.Get))
+<p>
+    Find by name: <input id="SearchString" name="SearchString" type="text" value="" />
+    <input type="button" value="Search" id="btnSearch" />
+</p>
+<div id="ProductList">
+    @Html.Partial("_ProductList", Model)
+</div>
+
+@section scripts
 {
-    <p>
-        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
+    <script type="text/javascript">
+        // Adding popstate event listener to handle browser back button
+        window.addEventListener("popstate", function (e) {
+            $.ajax({
+                url: location.href,
+                success: function (result) {
+                    $('#ProductList').html(result);
+                }
+            });
+        });
+
+        // update the url to reflect the table
+        function ChangeUrl(page, url) {
+            if (typeof (history.pushState) != "undefined") {
+                var obj = { Page: page, Url: url };
+                history.pushState(null, obj.Page, obj.Url);
+            } else {
+                alert("Browser does not support HTML5.");
+            }
+        }
+
+        // get the values from the url
+        function getUrlVars() {
+            var vars = [], hash;
+            var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (var i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                vars.push(hash[0]);
+                vars[hash[0]] = hash[1];
+            }
+            return vars;
+        }
+
+        // search function
+        function search() {
+            $.ajax({
+                url: "/Shop/Index?searchString=" + $('#SearchString').val(),
+                success: function (result) {
+                    ChangeUrl("index", "/Shop/Index?searchString=" + $('#SearchString').val());
+                    $('#ProductList').html(result);
+                }
+            });
+        }
+
+        $(function () {
+
+            // Search and Enter:
+            $("#btnSearch").click(function () {
+                search();
+            });
+            $("#SearchString").keypress(function (e) {
+                if (e.keyCode == 13) {
+                    search();
+                }
+            });
+
+            // refresh? recreates the url...
+            $('body').on('click', '#ProductList .pagination .sort', function (event) {
+                event.preventDefault();
+                console.log('page');
+                var searchString = $('#SearchString').val();
+                if (searchString == undefined || searchString == '') {
+                    searchString = '';
+                } else {
+                    searchString = '&searchString=' + searchString;
+                }
+                var url = $(this).attr('href') + searchString;
+                console.log(url);
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#ProductList').html(result);
+                    }
+                });
+            });
+
+            // do sorting
+            $('body').on('click', '#ProductList .table .sort', function (event) {
+
+                event.preventDefault();
+
+                var searchString = $('#SearchString').val();
+                if (searchString == undefined || searchString == '') {
+                    searchString = '';
+                } else {
+                    searchString = '&searchString=' + searchString;
+                }
+                //switch acs / desc
+                var columnToSort = $(this).text();
+                var currentSortOption = getUrlVars()['sortOption'];
+                console.log(currentSortOption);
+                var sort;
+                switch (currentSortOption) {
+                    case "name_acs":
+                        sort = 'sortOption=name_desc';
+                        break;
+                    case "name_desc":
+                        sort = 'sortOption=name_acs';
+                        break;
+                    case "price_acs":
+                        sort = 'sortOption=price_desc';
+                        break;
+                    case "price_desc":
+                        sort = 'sortOption=price_acs';
+                        break;
+                    case "stock_acs":
+                        sort = 'sortOption=stock_desc';
+                        break;
+                    case "stock_desc":
+                        sort = 'sortOption=stock_acs';
+                        break;
+                    default:
+                        sort = '';
+                        break;
+                }
+
+                //switch sort type
+                switch (columnToSort) {
+                    case 'Name':
+                        if (currentSortOption != 'name_acs' && currentSortOption != 'name_desc') {
+                            sort = 'sortOption=name_acs';
+                        }
+                        break;
+                    case 'Price':
+                        if (currentSortOption != 'price_acs' && currentSortOption != 'price_desc') {
+                            sort = 'sortOption=price_acs';
+                        }
+                        break;
+                    case 'Stock':
+                        if (currentSortOption != 'stock_acs' && currentSortOption != 'stock_decs') {
+                            sort = 'sortOption=stock_acs';
+                        }
+                        break;
+                    default:
+                        sort = '';
+                        break;
+
+                }
+                if (sort != '' & searchString != '') {
+                    sort = '&' + sort;
+                }
+
+                var url = '/Shop/Index?' + searchString + sort;
+                $.ajax({
+                    url: url,
+                    success: function (result) {
+                        ChangeUrl('index', url);
+                        $('#ProductList').html(result);
+                    }
+                });
+            });
+
+        });
+
+    </script>
 }
-
-@Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-
-@Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter })
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter })
-        </th>
-        <th>
-            Description
-        </th>
-        <th>
-            Stock
-        </th>
-        <th>
-            Category
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category1.categoryName)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "Details", new { id = item.productID })
-            </td>
-        </tr>
-    }
-
-</table>
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.ClassicPlusFirstAndLast)

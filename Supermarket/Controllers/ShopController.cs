@@ -13,51 +13,48 @@ namespace Supermarket.Controllers
 {
     public class ShopController : Controller
     {
-        private SupermarketEntitiesDB db = new SupermarketEntitiesDB();
+        private SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
 
         // GET: Shop
-        public ActionResult Index(string sortOrder, string currentFilter, string searchString, int? page)
+        public ActionResult Index(string searchString, string sortOption, int page = 1)
         {
-            ViewBag.CurrentSort = sortOrder;
-            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Name_Desc" : ""; //switch back and forth between those two values.
-            ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_Desc" : "Price";//switch back and forth between those two values.
-            if (searchString != null)
-            {
-                page = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
+            int pageSize = 10;
 
-            ViewBag.CurrentFilter = searchString;
-            var products = db.Products.Include(p => p.Category1);
-            // search
+            var products = _dbContext.Products.AsQueryable();
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                products = products.Where(prd => prd.name.Contains(searchString)
-                                       || prd.description.Contains(searchString)
-                                       || prd.Category1.categoryName.Contains(searchString));
+                products = _dbContext.Products.Where(p => p.name.ToLower().Contains(searchString));
             }
-            // sort
-            switch (sortOrder)
+            switch (sortOption)
             {
-                case "Name_Desc":
-                    products = products.OrderByDescending(prd => prd.name);
+                case "name_acs":
+                    products = products.OrderBy(p => p.name);
                     break;
-                case "Price":
-                    products = products.OrderBy(prd => prd.price);
+                case "name_desc":
+                    products = products.OrderByDescending(p => p.name);
                     break;
-                case "Price_Desc":
-                    products = products.OrderByDescending(prd => prd.price);
+                case "price_acs":
+                    products = products.OrderBy(p => p.price);
+                    break;
+                case "price_desc":
+                    products = products.OrderByDescending(p => p.price);
+                    break;
+                case "Stock_acs":
+                    products = products.OrderBy(p => p.stock);
+                    break;
+                case "Stock_desc":
+                    products = products.OrderByDescending(p => p.stock);
                     break;
                 default:
-                    products = products.OrderBy(prd => prd.name);
+                    products = products.OrderBy(p => p.name);
                     break;
+
             }
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
-            return View(products.ToPagedList(pageNumber, pageSize));
+
+            return Request.IsAjaxRequest()
+                ? (ActionResult)PartialView("_ProductList", products.ToPagedList(page, pageSize))
+                : View(products.ToPagedList(page, pageSize));
         }
 
         // GET: Shop/Details/5
@@ -67,7 +64,7 @@ namespace Supermarket.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Product product = db.Products.Find(id);
+            Product product = _dbContext.Products.Find(id);
             if (product == null)
             {
                 return HttpNotFound();
@@ -164,7 +161,7 @@ namespace Supermarket.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                _dbContext.Dispose();
             }
             base.Dispose(disposing);
         }

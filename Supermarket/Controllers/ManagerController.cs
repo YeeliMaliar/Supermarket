@@ -69,6 +69,7 @@ namespace Supermarket.Controllers
                     //set the image obj name and date
                     newImage.imageName = myfile;
                     newImage.UploadDate = DateTime.UtcNow;
+                    newImage.imageType = _Ext;
 
                     // gives the new product an ID
                     newProduct.product.productID = Guid.NewGuid();
