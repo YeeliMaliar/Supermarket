@@ -55,7 +55,7 @@ namespace Supermarket.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return View(); // add css
+            return View();
         }
 
 

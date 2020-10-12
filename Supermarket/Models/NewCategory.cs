@@ -3,21 +3,15 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
-using Supermarket.Models;
-using System.ComponentModel;
-
 
 namespace Supermarket.Models
 {
-    public class NewProduct
+    public class NewCategory
     {
         [Required]
-        public Product product { get; set; }
+        public Category category { get; set; }
 
-        [Required]
-        public int category { get; set; }
-
-        public HttpPostedFileBase picture { get; set; }
+        public HttpPostedFileBase NewPicture { get; set; }
 
         public ProductImage oldPicture { get; set; }
     }

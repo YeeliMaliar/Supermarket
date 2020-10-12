@@ -35,13 +35,17 @@
             @Html.DisplayFor(model => model.description)
         </dd>
 
+        <dt>
+            image:
+        </dt>
+
     </dl>
 
     @using (Html.BeginForm()) {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
+            <input type="submit" value="Delete" class="btn btn-default btn-danger" /> |
             @Html.ActionLink("Back to List", "Index")
         </div>
     }

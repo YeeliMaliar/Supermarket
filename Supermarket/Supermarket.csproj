@@ -175,6 +175,7 @@
     </Compile>
     <Compile Include="Models\FileUploadModel.cs" />
     <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\NewCategory.cs" />
     <Compile Include="Models\NewProduct.cs" />
     <Compile Include="Models\Order.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
@@ -400,6 +401,13 @@
     <Content Include="Views\Shop\Edit.cshtml" />
     <Content Include="Views\Shop\Index.cshtml" />
     <Content Include="Views\Shop\_ProductList.cshtml" />
+    <Content Include="Views\Manager\EditProduct.cshtml" />
+    <Content Include="Views\Manager\DeleteProduct.cshtml" />
+    <Content Include="Views\Manager\AddCategory.cshtml" />
+    <Content Include="Views\Manager\EditCategory.cshtml" />
+    <Content Include="Views\Manager\Categories.cshtml" />
+    <Content Include="Views\Manager\DeleteCategory.cshtml" />
+    <Content Include="Views\Manager\NewAdmin.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

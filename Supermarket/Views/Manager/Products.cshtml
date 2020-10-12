@@ -50,8 +50,8 @@
             @Html.DisplayFor(modelItem => item.Category1.categoryName)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.productID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.productID })
+            @Html.ActionLink("Edit", "EditProduct", new { id = item.productID }) |
+            @Html.ActionLink("Delete", "DeleteProduct", new { id = item.productID })
         </td>
     </tr>
 }
