@@ -148,6 +148,7 @@
     <Compile Include="Models\Address.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddStock.cs" />
     <Compile Include="Models\Cart.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
@@ -180,6 +181,7 @@
     <Compile Include="Models\Order.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\OrderProducts.cs" />
     <Compile Include="Models\Order_Product.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
@@ -388,7 +390,6 @@
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\ViewTest.cshtml" />
     <Content Include="Views\ErrorHandler\Index.cshtml" />
     <Content Include="Views\ErrorHandler\NotFound.cshtml" />
     <Content Include="Views\Manager\AddProduct.cshtml" />
@@ -408,6 +409,9 @@
     <Content Include="Views\Manager\Categories.cshtml" />
     <Content Include="Views\Manager\DeleteCategory.cshtml" />
     <Content Include="Views\Manager\NewAdmin.cshtml" />
+    <Content Include="Views\Manager\AddStock.cshtml" />
+    <Content Include="Views\Manager\Orders.cshtml" />
+    <Content Include="Views\Manager\OrderDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

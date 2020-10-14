@@ -80,3 +80,11 @@ p, h1, h2, button {
     width: 100px;
 }
 
+.Like_hyperlink {
+    cursor: pointer;
+    color: #007bff;
+}
+
+    .Like_hyperlink:hover {
+        font-weight: bold;
+    }

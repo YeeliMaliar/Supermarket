@@ -220,6 +220,7 @@ namespace Supermarket.Controllers
                 _dbContext.SaveChanges();
                 return RedirectToAction("Products");
             }
+            ViewBag.message = "modelstate invalid";
             ViewBag.category = new SelectList(_dbContext.Categories, "categoryID", "categoryName", newProduct.product.category);
             return View(newProduct);
         }
@@ -255,11 +256,40 @@ namespace Supermarket.Controllers
             return RedirectToAction("Products");
         }
 
+        public ActionResult AddStock(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AddStock a = new AddStock();
+            a.product = _dbContext.Products.Find(id);
+            if (a.product == null)
+            {
+                return HttpNotFound();
+            }
+            
+            return View(a);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddStock(AddStock addStock)
+        {
+           
+                Product product = _dbContext.Products.Where(e => e.productID == addStock.product.productID).FirstOrDefault();
+                product.stock += addStock.added;
+                _dbContext.Entry(product).State = EntityState.Modified;
+                _dbContext.SaveChanges();
+                return RedirectToAction("Products");
+           
+        }
+
         #endregion
 
         #region Category management
 
-        public ActionResult AddCategory()
+            public ActionResult AddCategory()
         {
             return View();
         }
@@ -482,6 +512,24 @@ namespace Supermarket.Controllers
                 ViewBag.message = "modelstate invalid";
                 return View();
             }
+        }
+
+        #endregion
+
+        #region orders
+
+        public ActionResult Orders()
+        {
+            var orders = _dbContext.Orders;
+            return View(orders.ToList());
+        }
+
+        public ActionResult OrderDetails(long orderId)
+        {
+            OrderProducts o = new OrderProducts();
+            o.order = _dbContext.Orders.Where(e => e.orderId == orderId).FirstOrDefault();
+            o.orderItems = _dbContext.Order_Product.Where(e => e.orderId == orderId).ToList();
+            return View(o);
         }
 
         #endregion

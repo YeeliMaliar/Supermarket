@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Supermarket.Models.Order>
+
+@{
+    ViewBag.Title = "Orders";
+}
+
+<h2>Orders</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.orderId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.checkoutTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.checkoutTotal)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.User.emailAddress)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.orderId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.checkoutTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.checkoutTotal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.emailAddress)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "OrderDetails", new { id = item.orderId })
+            </td>
+        </tr>
+    }
+
+</table>
+@Html.ActionLink("go back", "Index")

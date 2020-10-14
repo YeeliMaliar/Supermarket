@@ -32,28 +32,31 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.stock)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Category1.categoryName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "EditProduct", new { id = item.productID }) |
-            @Html.ActionLink("Delete", "DeleteProduct", new { id = item.productID })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.stock)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category1.categoryName)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditProduct", new { id = item.productID }) |
+                @Html.ActionLink("Add Stock", "AddStock", new { id = item.productID }) |
+                @Html.ActionLink("Delete", "DeleteProduct", new { id = item.productID })
+            </td>
+        </tr>
+    }
 
 </table>
+@Html.ActionLink("go back", "Index")

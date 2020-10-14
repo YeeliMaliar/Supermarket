@@ -16,15 +16,25 @@ namespace Supermarket.Controllers
         private SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
 
         // GET: Shop
-        public ActionResult Index(string searchString, string sortOption, int page = 1)
+        public ActionResult Index(string searchString, string sortOption, int category = 0, int page = 1)
         {
-            int pageSize = 10;
+            int pageSize = 2;
+
+
+            ViewBag.search = searchString;
+            ViewBag.sort = sortOption;
+            ViewBag.catg = category;
+
 
             var products = _dbContext.Products.AsQueryable();
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                products = _dbContext.Products.Where(p => p.name.ToLower().Contains(searchString));
+                products = products.Where(p => p.name.ToLower().Contains(searchString));
+            }
+            if ((category != 0) && (_dbContext.Categories.Where(e => e.categoryID == category).FirstOrDefault() != null))
+            {
+                products = products.Where(p => p.category == category);
             }
             switch (sortOption)
             {
@@ -40,10 +50,10 @@ namespace Supermarket.Controllers
                 case "price_desc":
                     products = products.OrderByDescending(p => p.price);
                     break;
-                case "Stock_acs":
+                case "stock_acs":
                     products = products.OrderBy(p => p.stock);
                     break;
-                case "Stock_desc":
+                case "stock_desc":
                     products = products.OrderByDescending(p => p.stock);
                     break;
                 default:
@@ -51,7 +61,7 @@ namespace Supermarket.Controllers
                     break;
 
             }
-
+            ViewBag.category = new SelectList(_dbContext.Categories, "categoryID", "categoryName");
             return Request.IsAjaxRequest()
                 ? (ActionResult)PartialView("_ProductList", products.ToPagedList(page, pageSize))
                 : View(products.ToPagedList(page, pageSize));

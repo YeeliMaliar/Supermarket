@@ -41,7 +41,16 @@
         <dd>
             @Html.DisplayFor(model => model.stock)
         </dd>
+
     </dl>
+    <div>
+        <input type="number" value=1 min=1 id="qty" />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="addtocart" type="submit" value="add to cart" class="btn btn-default btn-outline-success" />
+            </div>
+        </div>
+    </div>
 </div>
 <p>
     @Html.ActionLink("Back to List", "Index")

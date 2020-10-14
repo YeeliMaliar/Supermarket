@@ -4,6 +4,7 @@
     ViewBag.Title = "Admin Register";
 }
 
+
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -88,7 +89,7 @@
 
         <div class="form-group form-field">
             <button type="submit" class="btn btn-primary" style="margin-right: 10px;">Register</button>
-            @Html.ActionLink("Login here", "Login")
+            @Html.ActionLink("go back", "Index")
         </div>
     </div>
 }

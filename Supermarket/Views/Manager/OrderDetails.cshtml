@@ -1,0 +1,62 @@
+﻿@model Supermarket.Models.OrderProducts
+
+@{
+    ViewBag.Title = "Order Details";
+}
+
+<h1>Order Details</h1>
+
+@Html.DisplayNameFor(model => model.order.orderId)
+
+@Html.DisplayFor(model => model.order.orderId)
+
+@Html.DisplayNameFor(model => model.order.userID)
+
+@Html.DisplayFor(model => model.order.userID)
+
+@Html.DisplayNameFor(model => model.order.checkoutTime)
+
+@Html.DisplayFor(model => model.order.checkoutTime)
+
+@Html.DisplayNameFor(model => model.order.checkoutTotal)
+
+@Html.DisplayFor(model => model.order.checkoutTotal)
+
+<table class="table">
+    <tr>
+        <th>
+            order id
+        </th>
+        <th>
+            Product name
+        </th>
+        <th>
+            unit Price
+        </th>
+        <th>
+            quantity
+        </th>
+    </tr>
+
+    @foreach (var item in Model.orderItems)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.productID)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unitPrice)
+            </td>
+        </tr>
+    }
+
+</table>
+<p>
+@Html.ActionLink("Back to List", "Orders")
+</p>

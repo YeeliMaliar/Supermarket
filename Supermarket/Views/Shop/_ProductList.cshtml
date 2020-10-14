@@ -1,6 +1,6 @@
 ﻿@using PagedList.Mvc;
 @model PagedList.IPagedList<Supermarket.Models.Product>
-
+<script src="@Url.Content("~/Scripts/jquery.unobtrusive-ajax.min.js")" type="text/javascript"></script>
 <table class="table">
     <tr>
         <th>
@@ -41,5 +41,7 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index", new { page }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { searchString = ViewBag.search , sortOption = ViewBag.sort, category = ViewBag.catg, page}), 
+    PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing("ProductList"))
 
