@@ -8,7 +8,7 @@
     </a>
 
     @*cart, visble only on mobile*@
-    <a class="navbar-brand d-md-none" href="@Url.Action("Index", "Products")">
+    <a class="navbar-brand d-md-none" href="@Url.Action("Index", "ShoppingCart")">
         <i class="fas fa-shopping-cart"></i>
     </a>
 
@@ -42,10 +42,12 @@
                     @User.Identity.Name
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a class="dropdown-item" href="#">My Account</a>
-                    <a class="dropdown-item" href="#">Edit Profile</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="nav-link text-danger" href="@Url.Action("Logout", "Account")">Logout</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="dropdown-item" href="@Url.Action("Index", "Manager")">Manager page</a>
+                        <div class="dropdown-divider"></div>
+                    }
+                    <a class="text-danger dropdown-item" href="@Url.Action("Logout", "Account")">Logout</a>
                 </div>
             </li>
 
@@ -63,7 +65,7 @@
     </div>
 
     @*cart, visible only on desktop*@
-    <a class="navbar-brand d-md-block d-none" href="@Url.Action("Index", "Products")">
+    <a class="navbar-brand d-md-block d-none" href="@Url.Action("Index", "Shoppingcart")">
         <i class="fas fa-shopping-cart"></i>
     </a>
 

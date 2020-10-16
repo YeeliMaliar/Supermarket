@@ -18,7 +18,7 @@ namespace Supermarket.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Product()
         {
-            this.CartItems = new HashSet<CartItem>();
+            this.Carts = new HashSet<Cart>();
             this.Order_Product = new HashSet<Order_Product>();
         }
 
@@ -39,10 +39,10 @@ namespace Supermarket.Models
         public int stock { get; set; }
         [Display(Name = "Categoty number")]
         public int category { get; set; }
-        public System.Guid ImageID { get; set; }
-
+        public Nullable<System.Guid> ImageID { get; set; }
+    
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CartItem> CartItems { get; set; }
+        public virtual ICollection<Cart> Carts { get; set; }
         public virtual Category Category1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order_Product> Order_Product { get; set; }

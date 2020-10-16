@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Data;
 using System.Data.Entity;
+using Supermarket.ViewModels;
 using System.Web.Mvc;
 using System.Web.Security;
 using Supermarket.Models;

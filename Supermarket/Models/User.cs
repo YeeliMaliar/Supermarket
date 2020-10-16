@@ -18,7 +18,6 @@ namespace Supermarket.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.Carts = new HashSet<Cart>();
             this.Orders = new HashSet<Order>();
         }
 
@@ -39,6 +38,7 @@ namespace Supermarket.Models
         [Display(Name = "Phone number")]
         [Required(ErrorMessage = "This Field is required")]
         [Phone(ErrorMessage = "phone number must be valid")]
+
         public string phone { get; set; }
         public string passwordHash { get; set; }
         public string passwordSalt { get; set; }
@@ -46,8 +46,6 @@ namespace Supermarket.Models
         public System.Guid addressID { get; set; }
     
         public virtual Address Address { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cart> Carts { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }
         public virtual Permission Permission { get; set; }

@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Supermarket.Models;
+using Supermarket.ViewModels;
 using PagedList;
 
 namespace Supermarket.Controllers

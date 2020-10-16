@@ -14,17 +14,12 @@ namespace Supermarket.Models
     
     public partial class Cart
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Cart()
-        {
-            this.CartItems = new HashSet<CartItem>();
-        }
+        public string CartId { get; set; }
+        public System.Guid ProductId { get; set; }
+        public int count { get; set; }
+        public System.DateTime DateCreated { get; set; }
+        public System.Guid RecordId { get; set; }
     
-        public long CartID { get; set; }
-        public System.Guid UserId { get; set; }
-    
-        public virtual User User { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<CartItem> CartItems { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

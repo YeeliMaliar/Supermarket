@@ -50,6 +50,9 @@
                 <input id="addtocart" type="submit" value="add to cart" class="btn btn-default btn-outline-success" />
             </div>
         </div>
+        <p class="button">
+            @Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.productID }, "")
+        </p>
     </div>
 </div>
 <p>

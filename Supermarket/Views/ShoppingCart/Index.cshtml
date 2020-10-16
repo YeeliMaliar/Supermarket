@@ -1,0 +1,91 @@
+﻿@model Supermarket.ViewModels.ShoppingCartViewModel
+@{
+    ViewBag.Title = "Shopping Cart";
+}
+
+<h3>
+    <em>Review</em> your cart:
+</h3>
+<br />
+<div id="update-message">
+</div>
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>
+            Product Name
+        </th>
+        <th>
+            Price (each)
+        </th>
+        <th>
+            Quantity
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model.CartItems)
+    {
+        <tr id="row-@item.RecordId">
+            <td>
+                @Html.ActionLink(item.Product.name, "Details", "Shop", new { id = item.ProductId }, null)
+            </td>
+            <td>
+                @String.Format("{0:F}", item.Product.price)
+            </td>
+            <td id="item-count-@item.RecordId">
+                <input type="number" class="qty-@item.RecordId" value=@item.count min=0 id="item-county-@item.RecordId"/>
+            </td>
+            <td>
+                <a href="#" class="RemoveLink" data-id="@item.RecordId">
+                    Update
+                </a>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td>
+            Total
+        </td>
+        <td colspan=2>
+        </td>
+        <td id="cart-total">
+            @String.Format("{0:F}", Model.CartTotal)
+        </td>
+    </tr>
+</table>
+<p class="button">
+    @Html.ActionLink("Checkout >> ", "Payment", "Checkout", new { @class = "btn btn-default btn-outline-primary" })
+</p>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            // Document.ready -> link up remove event handler
+            $(".RemoveLink").click(function () {
+                event.preventDefault();
+                // Get the id from the link
+                var recordToDelete = $(this).attr("data-id");
+                var number = $(".qty-" + recordToDelete).val();
+
+                if (recordToDelete != '') {
+                    // Perform the ajax post
+                    $.post("/ShoppingCart/UpdateCart", { "id": recordToDelete, "qty": number },
+                        function (data) {
+                            // Successful requests get here
+                            // Update the page elements
+                            if (data.ItemCount == 0) {
+                                $('#row-' + data.DeleteId).fadeOut('slow');
+                            } 
+                            $('#cart-total').text(data.CartTotal);
+                            $('#update-message').text(data.Message);
+                            $('#cart-status').text('Cart (' + data.CartCount + ')');
+                        });
+                }
+            });
+
+            $(document).ajaxError(function (event, request, settings) {
+                console.log("Ajax cart update error");
+            });
+        });
+    </script>
+}

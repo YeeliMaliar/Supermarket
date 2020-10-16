@@ -9,6 +9,7 @@ using Supermarket.Models;
 using System.Configuration;
 using System.Net;
 using System.Web.Mvc.Ajax;
+using Supermarket.ViewModels;
 using System.Data.Entity;
 using System.Text;
 using System.Security.Cryptography;
@@ -18,11 +19,11 @@ namespace Supermarket.Controllers
     [CustomAuthorize(Roles = "Admin")]
     public class ManagerController : Controller
     {
-        SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
+        readonly SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
 
-        private string globalSalt = "N2Pzd1tFN1";
+        private readonly string globalSalt = "N2Pzd1tFN1";
 
-        string[] allowedExtensions = new[] { ".Jpg", ".png", ".jpg", "jpeg" };
+        readonly string[] allowedExtensions = new[] { ".Jpg", ".png", ".jpg", "jpeg" };
 
         public ActionResult Index()
         {
@@ -67,8 +68,10 @@ namespace Supermarket.Controllers
                         string name = Path.GetFileNameWithoutExtension(_FileName);
 
                         // create a new image item and it's ID
-                        ProductImage newImage = new ProductImage();
-                        newImage.ImageID = Guid.NewGuid();
+                        ProductImage newImage = new ProductImage
+                        {
+                            ImageID = Guid.NewGuid()
+                        };
 
 
                         // create a new filename ( name_ImageID.ext)
@@ -146,9 +149,11 @@ namespace Supermarket.Controllers
             }
             ViewBag.category = new SelectList(_dbContext.Categories, "categoryID", "categoryName", product.category);
 
-            NewProduct a = new NewProduct();
-            a.product = product;
-            a.oldPicture  = _dbContext.ProductImages.Where(e => e.ImageID == product.ImageID).FirstOrDefault();
+            NewProduct a = new NewProduct
+            {
+                product = product,
+                oldPicture = _dbContext.ProductImages.Where(e => e.ImageID == product.ImageID).FirstOrDefault()
+            };
             return View(a);
         }
         
@@ -195,10 +200,12 @@ namespace Supermarket.Controllers
                         // create new image
                         else
                         {
-                            ProductImage newimage = new ProductImage();
-                            newimage.ImageID = Guid.NewGuid();
-                            newimage.imageType = _Ext;
-                            newimage.UploadDate = DateTime.UtcNow;
+                            ProductImage newimage = new ProductImage
+                            {
+                                ImageID = Guid.NewGuid(),
+                                imageType = _Ext,
+                                UploadDate = DateTime.UtcNow
+                            };
                             newimage.imageName = name + "_" + newimage.ImageID + _Ext;
                             _path = Path.Combine(Server.MapPath("~/Content/productImages"), newimage.imageName);
                             _dbContext.ProductImages.Add(newimage);
@@ -262,8 +269,10 @@ namespace Supermarket.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            AddStock a = new AddStock();
-            a.product = _dbContext.Products.Find(id);
+            AddStock a = new AddStock
+            {
+                product = _dbContext.Products.Find(id)
+            };
             if (a.product == null)
             {
                 return HttpNotFound();
@@ -312,8 +321,10 @@ namespace Supermarket.Controllers
                         string name = Path.GetFileNameWithoutExtension(_FileName);
 
                         // create a new image item and it's ID
-                        ProductImage newImage = new ProductImage();
-                        newImage.ImageID = Guid.NewGuid();
+                        ProductImage newImage = new ProductImage
+                        {
+                            ImageID = Guid.NewGuid()
+                        };
 
                         // create a new filename ( name_ImageID.ext)
                         string myfile = name + "_" + newImage.ImageID + _Ext;
@@ -364,9 +375,11 @@ namespace Supermarket.Controllers
             {
                 return HttpNotFound();
             }
-            NewCategory a = new NewCategory();
-            a.category = category;
-            a.oldPicture = _dbContext.ProductImages.Where(e => e.ImageID == category.categoryImage).FirstOrDefault();
+            NewCategory a = new NewCategory
+            {
+                category = category,
+                oldPicture = _dbContext.ProductImages.Where(e => e.ImageID == category.categoryImage).FirstOrDefault()
+            };
             return View(a);
         }
 
@@ -411,10 +424,12 @@ namespace Supermarket.Controllers
                         // create new image
                         else
                         {
-                            ProductImage newimage = new ProductImage();
-                            newimage.ImageID = Guid.NewGuid();
-                            newimage.imageType = _Ext;
-                            newimage.UploadDate = DateTime.UtcNow;
+                            ProductImage newimage = new ProductImage
+                            {
+                                ImageID = Guid.NewGuid(),
+                                imageType = _Ext,
+                                UploadDate = DateTime.UtcNow
+                            };
                             newimage.imageName = name + "_" + newimage.ImageID + _Ext;
                             _path = Path.Combine(Server.MapPath("~/Content/productImages"), newimage.imageName);
                             _dbContext.ProductImages.Add(newimage);
@@ -490,8 +505,8 @@ namespace Supermarket.Controllers
                     _dbContext.Addresses.Add(registerUser.Address);
 
                     // set some parameters to the user and add it to the db
-                    registerUser.User.passwordSalt = getSalt();
-                    registerUser.User.passwordHash = getHash(registerUser.password, registerUser.User.passwordSalt);
+                    registerUser.User.passwordSalt = GetSalt();
+                    registerUser.User.passwordHash = GetHash(registerUser.password, registerUser.User.passwordSalt);
                     registerUser.User.userID = Guid.NewGuid();
                     registerUser.User.addressID = registerUser.Address.addressID;
                     registerUser.User.usertype = 2;
@@ -526,16 +541,18 @@ namespace Supermarket.Controllers
 
         public ActionResult OrderDetails(long orderId)
         {
-            OrderProducts o = new OrderProducts();
-            o.order = _dbContext.Orders.Where(e => e.orderId == orderId).FirstOrDefault();
-            o.orderItems = _dbContext.Order_Product.Where(e => e.orderId == orderId).ToList();
+            OrderProducts o = new OrderProducts
+            {
+                order = _dbContext.Orders.Where(e => e.orderId == orderId).FirstOrDefault(),
+                orderItems = _dbContext.Order_Product.Where(e => e.orderId == orderId).ToList()
+            };
             return View(o);
         }
 
         #endregion
 
         #region Helping functions
-        public string getHash(string pw, string salt) // add encryption
+        public string GetHash(string pw, string salt) // add encryption
         {
             string source = pw + salt + globalSalt;
             using (SHA512 sha512Hash = SHA512.Create())
@@ -549,7 +566,7 @@ namespace Supermarket.Controllers
             }
         }
 
-        public string getSalt()
+        public string GetSalt()
         {
             int length = 5;
             // creating a StringBuilder object()
