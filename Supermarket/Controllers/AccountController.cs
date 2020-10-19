@@ -17,7 +17,7 @@ namespace Supermarket.Controllers
     {
         private readonly SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
 
-        private string globalSalt = "N2Pzd1tFN1";
+        private readonly string globalSalt = "N2Pzd1tFN1";
 
         // GET: Account
 
@@ -40,9 +40,12 @@ namespace Supermarket.Controllers
                 if (UserExsist)
                 {
                     User TheUser = _dbContext.Users.FirstOrDefault(u => u.emailAddress == LoginModel.email);
-                    string hash = getHash(LoginModel.password, TheUser.passwordSalt);
+                    string hash = GetHash(LoginModel.password, TheUser.passwordSalt);
                     if (hash == TheUser.passwordHash)
                     {
+                        var cart = ShoppingCart.GetCart(this.HttpContext);
+                        cart.MigrateCart(LoginModel.email);
+                        Session.Abandon();
                         FormsAuthentication.SetAuthCookie(LoginModel.email, false);
                         return RedirectToAction("Index", "Home");
                     }
@@ -77,8 +80,8 @@ namespace Supermarket.Controllers
                     _dbContext.Addresses.Add(registerUser.Address);
 
                     // set some parameters to the user and add it to the db
-                    registerUser.User.passwordSalt = getSalt();
-                    registerUser.User.passwordHash = getHash(registerUser.password, registerUser.User.passwordSalt);
+                    registerUser.User.passwordSalt = GetSalt();
+                    registerUser.User.passwordHash = GetHash(registerUser.password, registerUser.User.passwordSalt);
                     registerUser.User.userID = Guid.NewGuid();
                     registerUser.User.addressID = registerUser.Address.addressID;
                     registerUser.User.usertype = 1;
@@ -86,6 +89,9 @@ namespace Supermarket.Controllers
 
                     // save, log in and return to the home page
                     _dbContext.SaveChanges();
+                    var cart = ShoppingCart.GetCart(this.HttpContext);
+                    cart.MigrateCart(registerUser.User.emailAddress);
+                    Session.Abandon();
                     FormsAuthentication.SetAuthCookie(registerUser.User.emailAddress, false);
                     return RedirectToAction("Index", "Home");
                 }
@@ -106,12 +112,13 @@ namespace Supermarket.Controllers
         [AllowAnonymous]
         public ActionResult Logout()
         {
+            Session.Abandon();
             FormsAuthentication.SignOut();
             return RedirectToAction("Login");
         }
 
 
-        public string getHash(string pw, string salt) // add encryption
+        public string GetHash(string pw, string salt) // add encryption
         {
             string source = pw + salt + globalSalt;
             using (SHA512 sha512Hash = SHA512.Create())
@@ -125,7 +132,7 @@ namespace Supermarket.Controllers
             }
         }
 
-        public string getSalt()
+        public string GetSalt()
         {
             int length = 5;
             // creating a StringBuilder object()

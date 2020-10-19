@@ -1,0 +1,108 @@
+﻿@model Supermarket.Models.Product
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Product</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.stock)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.stock)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Category1.categoryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Category1.categoryName)
+        </dd>
+
+        <dt>
+            image
+        </dt>
+
+        <dd>
+            <div style="height:270px; width:270px;">
+                <img src="~/Content/productImages/@Model.ProductImage.imageName" alt="@Model.ProductImage.imageName" style="max-width: 100%; max-height: 100%;" />
+            </div>
+        </dd>
+
+    </dl>
+
+    <div id="item-amount">
+        <input type="number" value=1 min=1 id="item-qty" />
+    </div>
+    <div>
+        <a href="#" class="AddLink btn btn-default btn-outline-success" data-id="@Model.productID">
+            add
+        </a>
+    </div>
+    <div id="update-message">
+    </div>
+    @*@Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.productID }, new { @class = "btn btn-default btn-outline-success" })*@
+</div>
+<br />
+<p>
+    @Html.ActionLink("Back to List", "Index")
+</p>
+
+@section scripts
+{
+    <script type="text/javascript">
+        $(function () {
+            // Document.ready -> link up remove event handler
+            $(".AddLink").click(function () {
+                event.preventDefault();
+                // Get the id from the link
+                var ItemToAdd = $(this).attr("data-id");
+                var number = $("#item-qty").val();
+
+                if (ItemToAdd != '') {
+                    // Perform the ajax post
+                    $.post("/ShoppingCart/AddToCart", { "id": ItemToAdd, "qty": number },
+                        function (data) {
+                            $('#update-message').text(data);
+                        });
+                }
+            });
+
+            $(document).ajaxError(function (event, request, settings) {
+                console.log("Ajax cart add error");
+                $('#update-message').text("ajax error");
+            });
+        });
+    </script>
+}

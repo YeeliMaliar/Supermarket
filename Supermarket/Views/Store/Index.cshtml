@@ -5,34 +5,40 @@
     ViewBag.Title = "Store";
 }
 
-<h2>Products, change design later...</h2>
-
+<h1>Products:</h1>
 @using (Html.BeginForm("Index", "Store", FormMethod.Get))
 {
-    <p>
-        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
+    @Html.AntiForgeryToken()
+    <div class="row align-items-center">
+        @Html.Hidden("SearchString", ViewBag.CurrentFilter as string)
+        <p class="p-2">@Html.DropDownList("category", null, "ללא קטגוריה", htmlAttributes: new { @class = "form-control", id = "currentCategory", name = "currentCategory", dir = "rtl" })</p>
+        <p class="p-2"><input type="submit" value="Filter" /></p>
+        <p class="p-2">@Html.ActionLink("Clear", "Index")</p>
+    </div>
+}
+
+@if (ViewBag.currentFilter != null)
+{
+    <h4>results for: "@ViewBag.currentFilter"</h4>
 }
 
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory })
         </th>
         <th>
-            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter })
+            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory })
         </th>
         <th>
-            Description
-        </th>
-        <th>
-            Stock
+            @Html.ActionLink("Stock", "Index", new { sortOrder = ViewBag.StockSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory })
         </th>
         <th>
             Category
         </th>
-        <th></th>
+        <th>
+            Image
+        </th>
     </tr>
 
     @foreach (var item in Model)
@@ -45,16 +51,17 @@
                 @Html.DisplayFor(modelItem => item.price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.description)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.stock)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category1.categoryName)
             </td>
             <td>
-                @Html.ActionLink("Details", "Details", new { id = item.productID })
+                <a href="@Url.Action("Details", "Store", new { id = item.productID })">
+                    <div style="height:180px; width:180px;">
+                        <img src="~/Content/productImages/@item.ProductImage.imageName" alt="@item.ProductImage.imageName" style="max-width: 100%; max-height: 100%;" />
+                    </div>
+                </a>
             </td>
         </tr>
     }
@@ -63,5 +70,14 @@
 <br />
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
-@Html.PagedListPager(Model, page => Url.Action("Index",
-    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.ClassicPlusFirstAndLast)
+<div class="pagination-center">
+    @Html.PagedListPager(Model, page => Url.Action("Index",
+    new
+        {
+        page,
+        sortOrder = ViewBag.CurrentSort,
+        currentFilter = ViewBag.CurrentFilter,
+        category = ViewBag.CurrentCategory
+        }),
+    PagedListRenderOptions.ClassicPlusFirstAndLast)
+</div>

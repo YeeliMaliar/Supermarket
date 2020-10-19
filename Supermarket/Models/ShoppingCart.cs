@@ -9,7 +9,7 @@ namespace Supermarket.Models
 {
     public class ShoppingCart
     {
-        SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
+        private readonly SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
         string ShoppingCartId { get; set; }
         public const string CartSessionKey = "CartId";
         
@@ -26,7 +26,7 @@ namespace Supermarket.Models
             return GetCart(controller.HttpContext);
         }
 
-        public void AddToCart(Product product)
+        public void AddToCart(Product product, int qty)
         {
             // Get the matching cart and album instances
             var cartItem = _dbContext.Carts.SingleOrDefault(
@@ -41,7 +41,7 @@ namespace Supermarket.Models
                     RecordId = Guid.NewGuid(),
                     ProductId = product.productID,
                     CartId = ShoppingCartId,
-                    count = 1,
+                    count = qty,
                     DateCreated = DateTime.Now
                 };
                 _dbContext.Carts.Add(cartItem);
@@ -50,7 +50,7 @@ namespace Supermarket.Models
             {
                 // If the item does exist in the cart, 
                 // then add one to the quantity
-                cartItem.count += 1;
+                cartItem.count += qty;
             }
             // Save changes
             _dbContext.SaveChanges();
@@ -175,6 +175,7 @@ namespace Supermarket.Models
                     context.Session[CartSessionKey] = tempCartId.ToString();
                 }
             }
+            // ???
             return context.Session[CartSessionKey].ToString();
         }
 
@@ -191,6 +192,5 @@ namespace Supermarket.Models
             }
             _dbContext.SaveChanges();
         }
-
     }
 }

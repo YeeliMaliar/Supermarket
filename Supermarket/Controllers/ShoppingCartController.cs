@@ -10,7 +10,7 @@ namespace Supermarket.Controllers
 {
     public class ShoppingCartController : Controller
     {
-        SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
+        private readonly SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
 
         // GET: ShoppingCart
         public ActionResult Index()
@@ -27,21 +27,25 @@ namespace Supermarket.Controllers
             return View(viewModel);
         }
 
-        public ActionResult AddToCart(Guid id)
+        [HttpPost]
+        public ActionResult AddToCart(Guid id, int qty)
         {
+            // Add it to the shopping cart
+            var cart = ShoppingCart.GetCart(this.HttpContext);
+
             // Retrieve the product from the database
             var addedProduct = _dbContext.Products
                 .Single(product => product.productID == id);
 
-            // Add it to the shopping cart
-            var cart = ShoppingCart.GetCart(this.HttpContext);
 
-            cart.AddToCart(addedProduct);
+            cart.AddToCart(addedProduct, qty);
 
-            // Go back to the main store page for more shopping
-            return RedirectToAction("Index", "ShoppingCart");
+            string results = "Item added to cart";
+
+            // Display the confirmation message
+            return Json(results);
         }
-        
+
         // AJAX: /ShoppingCart/RemoveFromCart/5
         [HttpPost]
         public ActionResult UpdateCart(Guid id, int qty)

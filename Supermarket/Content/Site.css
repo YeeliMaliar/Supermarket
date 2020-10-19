@@ -88,3 +88,8 @@ p, h1, h2, button {
     .Like_hyperlink:hover {
         font-weight: bold;
     }
+
+.pagination-center {
+    padding-bottom: 20px;
+    text-align: center;
+}

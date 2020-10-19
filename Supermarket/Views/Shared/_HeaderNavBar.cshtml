@@ -24,10 +24,18 @@
         @*@using (Html.BeginForm("action", "controller", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search" }))
         {
         }*@
-        <form class="form-inline my-2 my-lg-0">
+
+        @using (Html.BeginForm("index","Store", FormMethod.Get)) {
+        <div class="form-inline my-2 my-lg-0">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="SearchString" id="SearchString" style="width: 300px" value="@ViewBag.CurrentFilter">
+            <button class="btn btn-outline-info my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
+        </div>
+        }
+
+        @*<form class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width: 300px">
             <button class="btn btn-outline-info my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-        </form>
+        </form>*@
 
         @*links*@
         <ul class="navbar-nav">

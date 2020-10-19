@@ -35,7 +35,7 @@
                 <input type="number" class="qty-@item.RecordId" value=@item.count min=0 id="item-county-@item.RecordId"/>
             </td>
             <td>
-                <a href="#" class="RemoveLink" data-id="@item.RecordId">
+                <a href="#" class="UpdateLink" data-id="@item.RecordId">
                     Update
                 </a>
             </td>
@@ -61,7 +61,7 @@
     <script type="text/javascript">
         $(function () {
             // Document.ready -> link up remove event handler
-            $(".RemoveLink").click(function () {
+            $(".UpdateLink").click(function () {
                 event.preventDefault();
                 // Get the id from the link
                 var recordToDelete = $(this).attr("data-id");

@@ -16,22 +16,22 @@ namespace Supermarket.Controllers
 {
     public class HomeController : Controller
     {
-        private SupermarketEntitiesDB _dbContext = new SupermarketEntitiesDB();
-
         public ActionResult Index()
         {
             return View();
         }
 
-        [CustomAuthorize(Roles = "Admin")]
+        
         public ActionResult About()
         {
             return View();
         }
 
-        public ActionResult Contact()
+        // simulating timeout.
+        public ActionResult Abandon()
         {
-            return View();
+            Session.Abandon();
+            return RedirectToAction("Index");
         }
     }
 }
