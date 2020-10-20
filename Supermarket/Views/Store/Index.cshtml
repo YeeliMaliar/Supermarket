@@ -8,7 +8,6 @@
 <h1>Products:</h1>
 @using (Html.BeginForm("Index", "Store", FormMethod.Get))
 {
-    @Html.AntiForgeryToken()
     <div class="row align-items-center">
         @Html.Hidden("SearchString", ViewBag.CurrentFilter as string)
         <p class="p-2">@Html.DropDownList("category", null, "ללא קטגוריה", htmlAttributes: new { @class = "form-control", id = "currentCategory", name = "currentCategory", dir = "rtl" })</p>
@@ -19,7 +18,9 @@
 
 @if (ViewBag.currentFilter != null)
 {
+    <br />
     <h4>results for: "@ViewBag.currentFilter"</h4>
+    <br />
 }
 
 <table class="table">
@@ -57,7 +58,7 @@
                 @Html.DisplayFor(modelItem => item.Category1.categoryName)
             </td>
             <td>
-                <a href="@Url.Action("Details", "Store", new { id = item.productID })">
+                <a href="@Url.Action("Product", "Store", new { id = item.productID })">
                     <div style="height:180px; width:180px;">
                         <img src="~/Content/productImages/@item.ProductImage.imageName" alt="@item.ProductImage.imageName" style="max-width: 100%; max-height: 100%;" />
                     </div>

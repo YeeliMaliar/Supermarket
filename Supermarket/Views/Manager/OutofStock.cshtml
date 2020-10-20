@@ -2,17 +2,17 @@
 @using PagedList.Mvc;
 <link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 @{
-    ViewBag.Title = "Products";
+    ViewBag.Title = "Out of stock";
 }
 
 <h1>Products:</h1>
-@using (Html.BeginForm("Products", "Manager", FormMethod.Get))
+@using (Html.BeginForm("OutofStock", "Manager", FormMethod.Get))
 {
     <div class="row align-items-center">
         <p class="p-2">@Html.TextBox("SearchString", ViewBag.CurrentFilterO as string)</p>
         <p class="p-2">@Html.DropDownList("category", null, "ללא קטגוריה", htmlAttributes: new { @class = "form-control", id = "currentCategory", name = "currentCategory", dir = "rtl" })</p>
         <p class="p-2"><input type="submit" value="Filter" /></p>
-        <p class="p-2">@Html.ActionLink("Clear", "Products")</p>
+        <p class="p-2">@Html.ActionLink("Clear", "OutofStock")</p>
     </div>
 }
 
@@ -22,20 +22,16 @@
     <h4>results for: "@ViewBag.currentFilterO"</h4>
     <br />
 }
-
-<p>
-    @Html.ActionLink("Create a new product", "AddProduct")
-</p>
 <table class="table">
     <tr>
         <th>
-            @Html.ActionLink("Name", "Products", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilterO, category = ViewBag.CurrentCategory })
+            @Html.ActionLink("Name", "OutofStock", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilterO, category = ViewBag.CurrentCategory })
         </th>
         <th>
-            @Html.ActionLink("Price", "Products", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilterO, category = ViewBag.CurrentCategory })
+            @Html.ActionLink("Price", "OutofStock", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilterO, category = ViewBag.CurrentCategory })
         </th>
         <th>
-            @Html.ActionLink("Stock", "Products", new { sortOrder = ViewBag.StockSortParm, currentFilter = ViewBag.CurrentFilterO, category = ViewBag.CurrentCategory })
+            Stock
         </th>
         <th>
             Category
@@ -56,7 +52,7 @@
                 @Html.DisplayFor(modelItem => item.price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.stock)
+                <p class="text-danger">Out of Stock</p>
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category1.categoryName)
@@ -69,9 +65,8 @@
                 </a>
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditProduct", new { id = item.productID }) |
-                @Html.ActionLink("Add Stock", "AddStock", new { id = item.productID }) |
-                @Html.ActionLink("Delete", "DeleteProduct", new { id = item.productID })
+                @Html.ActionLink("Add Stock", "AddStockO", new { id = item.productID }) |
+                @Html.ActionLink("Delete", "DeleteProductO", new { id = item.productID })
             </td>
         </tr>
     }
@@ -81,7 +76,7 @@
 Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
 
 <div class="pagination-center">
-    @Html.PagedListPager(Model, page => Url.Action("Products",
+    @Html.PagedListPager(Model, page => Url.Action("OutofStock",
     new
         {
         page,
@@ -94,3 +89,4 @@ Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.Page
 <p class="p-2">
     @Html.ActionLink("go back", "Index")
 </p>
+

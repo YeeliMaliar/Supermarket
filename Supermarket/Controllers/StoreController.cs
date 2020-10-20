@@ -82,7 +82,7 @@ namespace Supermarket.Controllers
         }
         
         
-        public ActionResult Details(Guid id)
+        public ActionResult Product(Guid id)
         {
             Product prod = _dbContext.Products.Where(e => e.productID == id).FirstOrDefault();
             return View(prod);

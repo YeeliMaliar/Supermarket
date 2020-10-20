@@ -41,12 +41,13 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
+    @using (Html.BeginForm())
+    {
         @Html.AntiForgeryToken()
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default btn-danger" /> |
-            @Html.ActionLink("Back to List", "Products")
+            @Html.ActionLink("Back to List", "OutofStock")
         </div>
     }
 </div>

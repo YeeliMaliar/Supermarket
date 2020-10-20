@@ -3,12 +3,13 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - ASP.NET Application</title>
+    <title>@ViewBag.Title - Supermarket</title>
     <style type="text/css">
         @@font-face {
             font-family: 'Lobster';
             src: url(/fonts/Lobster-Regular.ttf);
         }
+
         @@font-face {
             font-family: 'Roboto';
             src: url(/fonts/Roboto-Regular.ttf);
@@ -27,9 +28,12 @@
     <main class="body-content">
         @RenderBody()
     </main>
-       
-    <footer class="footer">
-        <p>&copy; @DateTime.Now.Year - ASP.NET Application</p>
+    <br />
+    <footer class="footer page-footer navbar-dark bg-dark">
+        <div class="footer-copyright text-center py-3 bg-dark text-white">
+            © @DateTime.Now.Year Copyright:
+            <a href="#">  Supermarket</a>
+        </div>
     </footer>
 
     @Scripts.Render("~/bundles/jquery")

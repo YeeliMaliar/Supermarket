@@ -408,7 +408,10 @@
     <Content Include="Views\Manager\OrderDetails.cshtml" />
     <Content Include="Views\ShoppingCart\Index.cshtml" />
     <Content Include="Views\Store\Index.cshtml" />
-    <Content Include="Views\Store\Details.cshtml" />
+    <Content Include="Views\Store\Product.cshtml" />
+    <Content Include="Views\Manager\OutofStock.cshtml" />
+    <Content Include="Views\Manager\AddStockO.cshtml" />
+    <Content Include="Views\Manager\DeleteProductO.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

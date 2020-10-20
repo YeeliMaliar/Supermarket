@@ -26,7 +26,7 @@
     {
         <tr id="row-@item.RecordId">
             <td>
-                @Html.ActionLink(item.Product.name, "Details", "Shop", new { id = item.ProductId }, null)
+                @Html.ActionLink(item.Product.name, "Product", "Shop", new { id = item.ProductId }, null)
             </td>
             <td>
                 @String.Format("{0:F}", item.Product.price)

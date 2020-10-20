@@ -1,23 +1,14 @@
 ﻿@model Supermarket.Models.Product
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = Model.name;
 }
 
-<h2>Details</h2>
+<h1>@Model.name</h1>
 
 <div>
-    <h4>Product</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.name)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.name)
-        </dd>
-
         <dt>
             @Html.DisplayNameFor(model => model.price)
         </dt>
@@ -52,32 +43,35 @@
 
         <dt>
             image
+            
         </dt>
 
         <dd>
-            <div style="height:270px; width:270px;">
-                <img src="~/Content/productImages/@Model.ProductImage.imageName" alt="@Model.ProductImage.imageName" style="max-width: 100%; max-height: 100%;" />
+            <br />
+            <div style="height: 270px; width: 270px; border: 2px solid grey; border-radius:5px;">
+                <img src="~/Content/productImages/@Model.ProductImage.imageName"
+                     alt="@Model.ProductImage.imageName"
+                     style="max-width: 100%; max-height: 100%;" />
             </div>
         </dd>
 
     </dl>
-
-    <div id="item-amount">
-        <input type="number" value=1 min=1 id="item-qty" />
-    </div>
-    <div>
-        <a href="#" class="AddLink btn btn-default btn-outline-success" data-id="@Model.productID">
+    <div class="row align-items-center">
+        <a href="#" class="AddLink btn btn-default btn-outline-success p-2" data-id="@Model.productID">
             add
         </a>
+        <div id="item-amount" class="p-2">
+            <input type="number" value=1 min=1 id="item-qty" style="width:60px; height:40px;" />
+        </div>
     </div>
     <div id="update-message">
     </div>
-    @*@Html.ActionLink("Add to cart", "AddToCart", "ShoppingCart", new { id = Model.productID }, new { @class = "btn btn-default btn-outline-success" })*@
 </div>
 <br />
 <p>
     @Html.ActionLink("Back to List", "Index")
 </p>
+<br />
 
 @section scripts
 {

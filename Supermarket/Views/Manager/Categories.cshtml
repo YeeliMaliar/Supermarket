@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Supermarket.Models.Category>
+﻿@model PagedList.IPagedList<Supermarket.Models.Category>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Categories";
@@ -6,16 +8,33 @@
 
 <h2>Categories</h2>
 
+@using (Html.BeginForm("Categories", "Manager", FormMethod.Get))
+{
+    <div class="row align-items-center">
+        <p class="p-2">@Html.TextBox("SearchString", ViewBag.CurrentFilterO as string)</p>
+        <p class="p-2"><input type="submit" value="Filter" /></p>
+        <p class="p-2">@Html.ActionLink("Clear", "Categories")</p>
+    </div>
+}
+
+@if (ViewBag.currentFilterO != null)
+{
+    <br />
+    <h4>results for: "@ViewBag.currentFilterO"</h4>
+    <br />
+}
+
+
 <p>
     @Html.ActionLink("Create New", "AddCategory")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.categoryName)
+            Name
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ProductImage.imageName)
+            Image
         </th>
         <th></th>
     </tr>
@@ -27,7 +46,9 @@
                 @Html.DisplayFor(modelItem => item.categoryName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ProductImage.imageName)
+                <div style="height:180px; width:180px;">
+                    <img src="~/Content/productImages/@item.ProductImage.imageName" alt="@item.ProductImage.imageName" style="max-width: 100%; max-height: 100%;" />
+                </div>
             </td>
             <td>
                 @Html.ActionLink("Edit", "EditCategory", new { id = item.categoryID }) |
@@ -37,4 +58,19 @@
     }
 
 </table>
-@Html.ActionLink("go back", "Index")
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+<div class="pagination-center">
+    @Html.PagedListPager(Model, page => Url.Action("Categories",
+    new
+        {
+        page,
+        sortOrder = ViewBag.CurrentSort,
+        currentFilter = ViewBag.CurrentFilterO
+        }),
+    PagedListRenderOptions.ClassicPlusFirstAndLast)
+</div>
+<p class="p-2">
+    @Html.ActionLink("go back", "Index")
+</p>

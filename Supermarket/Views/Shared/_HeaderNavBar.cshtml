@@ -4,7 +4,7 @@
     @*logo*@
     <a class="navbar-brand mr-auto" href="/">
         <img src="~/Content/uokpl.rs-earth-png-4045898.png" width="30" height="30" alt="logo" loading="lazy">
-        <span class="navbar-brand mb-0 h1" id="top-brand-name">WebApplication</span>
+        <span class="navbar-brand mb-0 h1" id="top-brand-name">Supermarket</span>
     </a>
 
     @*cart, visble only on mobile*@
@@ -20,11 +20,7 @@
     @*colapsable nav contant*@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-        @*Search bar*@
-        @*@using (Html.BeginForm("action", "controller", FormMethod.Post, new { @class = "navbar-form navbar-left", role = "search" }))
-        {
-        }*@
-
+        
         @using (Html.BeginForm("index","Store", FormMethod.Get)) {
         <div class="form-inline my-2 my-lg-0">
             <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="SearchString" id="SearchString" style="width: 300px" value="@ViewBag.CurrentFilter">
@@ -32,10 +28,6 @@
         </div>
         }
 
-        @*<form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" style="width: 300px">
-            <button class="btn btn-outline-info my-2 my-sm-0" type="submit"><i class="fas fa-search"></i></button>
-        </form>*@
 
         @*links*@
         <ul class="navbar-nav">

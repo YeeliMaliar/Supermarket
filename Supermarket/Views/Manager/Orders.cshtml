@@ -1,48 +1,80 @@
-﻿@model IEnumerable<Supermarket.Models.Order>
+﻿@model PagedList.IPagedList<Supermarket.Models.Order>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
-@{
-    ViewBag.Title = "Orders";
-}
-
-<h2>Orders</h2>
-
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.orderId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.checkoutTime)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.checkoutTotal)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.User.emailAddress)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.orderId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.checkoutTime)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.checkoutTotal)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.User.emailAddress)
-            </td>
-            <td>
-                @Html.ActionLink("Details", "OrderDetails", new { id = item.orderId })
-            </td>
-        </tr>
+    @{
+        ViewBag.Title = "Orders";
     }
 
-</table>
-@Html.ActionLink("go back", "Index")
+    <h2>Orders:</h2>
+    @using (Html.BeginForm("Orders", "Manager", FormMethod.Get))
+    {
+        <div class="row align-items-center">
+            <p class="p-2">@Html.TextBox("SearchString", ViewBag.CurrentFilterO as string)</p>
+            <p class="p-2"><input type="submit" value="Filter" /></p>
+            <p class="p-2">@Html.ActionLink("Clear", "Orders")</p>
+        </div>
+    }
+
+    @if (ViewBag.currentFilterO != null)
+    {
+        <br />
+        <h4>results for: "@ViewBag.currentFilterO"</h4>
+        <br />
+    }
+
+    <table class="table">
+        <tr>
+            <th>
+                Order ID
+            </th>
+            <th>
+                @Html.ActionLink("Checkout Time", "Orders", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilterO })
+            </th>
+            <th>
+                Price Total
+            </th>
+            <th>
+                User email Address
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.orderId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.checkoutTime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.checkoutTotal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.User.emailAddress)
+                </td>
+                <td>
+                    @Html.ActionLink("Details", "OrderDetails", new { id = item.orderId })
+                </td>
+            </tr>
+        }
+
+    </table>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    <div class="pagination-center">
+        @Html.PagedListPager(Model, page => Url.Action("Orders",
+        new
+            {
+            page,
+            sortOrder = ViewBag.CurrentSort,
+            currentFilter = ViewBag.CurrentFilterO
+            }),
+        PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
+    <p class="p-2">
+        @Html.ActionLink("go back", "Index")
+    </p>

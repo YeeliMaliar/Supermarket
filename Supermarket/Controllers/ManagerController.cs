@@ -13,6 +13,7 @@ using Supermarket.ViewModels;
 using System.Data.Entity;
 using System.Text;
 using System.Security.Cryptography;
+using PagedList;
 
 namespace Supermarket.Controllers
 {
@@ -29,15 +30,91 @@ namespace Supermarket.Controllers
         {
             return View();
         }
-        public ActionResult Products()
+        
+        public ActionResult Products(string sortOrder, string currentFilter, string searchString, int? category, int? page)
         {
-            var products = _dbContext.Products;
-            return View(products.ToList());
+            // Viewbag:
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Name_Desc" : ""; //switch back and forth between those two values.
+            ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_Desc" : "Price"; //switch back and forth between those two values.
+            ViewBag.StockSortParm = sortOrder == "Stock" ? "Stock_Desc" : "Stock"; //switch back and forth between those two values.
+            ViewBag.category = new SelectList(_dbContext.Categories, "categoryID", "categoryName");
+
+            // handle search
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilterO = searchString;
+            var products = _dbContext.Products.Include(c => c.Category1);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(prd => prd.name.Contains(searchString)
+                                       || prd.description.Contains(searchString));
+            }
+
+            // handle category
+            ViewBag.CurrentCategory = null;
+            if (category != null)
+            {
+                ViewBag.CurrentCategory = category;
+                products = products.Where(prod => prod.category == category);
+            }
+
+            // sort
+            switch (sortOrder)
+            {
+                case "Name_Desc":
+                    products = products.OrderByDescending(prd => prd.name);
+                    break;
+                case "Price":
+                    products = products.OrderBy(prd => prd.price);
+                    break;
+                case "Price_Desc":
+                    products = products.OrderByDescending(prd => prd.price);
+                    break;
+                case "Stock":
+                    products = products.OrderBy(prd => prd.stock);
+                    break;
+                case "Stock_Desc":
+                    products = products.OrderByDescending(prd => prd.stock);
+                    break;
+                default:
+                    products = products.OrderBy(prd => prd.name);
+                    break;
+            }
+
+            // pagination
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
         }
-        public ActionResult Categories()
+
+        public ActionResult Categories(string currentFilter, string searchString, int? page)
         {
-            var categories = _dbContext.Categories;
-            return View(categories.ToList());
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilterO = searchString;
+            var categories = _dbContext.Categories.Include(c => c.ProductImage);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                categories = categories.Where(cat => cat.categoryName.Contains(searchString));
+            }
+            categories = categories.OrderBy(cat => cat.categoryName);
+            // pagination
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(categories.ToPagedList(pageNumber, pageSize));
         }
 
         #region Product management
@@ -263,6 +340,37 @@ namespace Supermarket.Controllers
             return RedirectToAction("Products");
         }
 
+        public ActionResult DeleteProductO(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Product product = _dbContext.Products.Find(id);
+            if (product == null)
+            {
+                return HttpNotFound();
+            }
+            return View(product);
+        }
+
+        [HttpPost, ActionName("DeleteProductO")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmedO(Guid id)
+        {
+            Product product = _dbContext.Products.Find(id);
+            ProductImage image = _dbContext.ProductImages.Where(e => e.ImageID == product.ImageID).FirstOrDefault();
+            if (image.imageName != "noimage.jpg")
+            {
+                System.IO.File.Delete(Path.Combine(Server.MapPath("~/Content/productImages"), image.imageName));
+                _dbContext.ProductImages.Remove(image);
+            }
+            _dbContext.Products.Remove(product);
+            _dbContext.SaveChanges();
+            return RedirectToAction("OutofStock");
+        }
+
+
         public ActionResult AddStock(Guid? id)
         {
             if (id == null)
@@ -294,11 +402,98 @@ namespace Supermarket.Controllers
            
         }
 
+        public ActionResult AddStockO(Guid? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            AddStock a = new AddStock
+            {
+                product = _dbContext.Products.Find(id)
+            };
+            if (a.product == null)
+            {
+                return HttpNotFound();
+            }
+
+            return View(a);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddStockO(AddStock addStock)
+        {
+
+            Product product = _dbContext.Products.Where(e => e.productID == addStock.product.productID).FirstOrDefault();
+            product.stock += addStock.added;
+            _dbContext.Entry(product).State = EntityState.Modified;
+            _dbContext.SaveChanges();
+            return RedirectToAction("OutofStock");
+
+        }
+
+        public ActionResult OutofStock(string sortOrder, string currentFilter, string searchString, int? category, int? page)
+        {
+            // Viewbag:
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Name_Desc" : ""; //switch back and forth between those two values.
+            ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_Desc" : "Price"; //switch back and forth between those two values.
+            ViewBag.category = new SelectList(_dbContext.Categories, "categoryID", "categoryName");
+
+            // handle search
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilterO = searchString;
+            var products = _dbContext.Products.Where(model => model.stock <= 0);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(prd => prd.name.Contains(searchString)
+                                       || prd.description.Contains(searchString));
+            }
+
+            // handle category
+            ViewBag.CurrentCategory = null;
+            if (category != null)
+            {
+                ViewBag.CurrentCategory = category;
+                products = products.Where(prod => prod.category == category);
+            }
+
+            // sort
+            switch (sortOrder)
+            {
+                case "Name_Desc":
+                    products = products.OrderByDescending(prd => prd.name);
+                    break;
+                case "Price":
+                    products = products.OrderBy(prd => prd.price);
+                    break;
+                case "Price_Desc":
+                    products = products.OrderByDescending(prd => prd.price);
+                    break;
+                default:
+                    products = products.OrderBy(prd => prd.name);
+                    break;
+            }
+
+            // pagination
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber, pageSize));
+        }
+
         #endregion
 
         #region Category management
 
-            public ActionResult AddCategory()
+        public ActionResult AddCategory()
         {
             return View();
         }
@@ -533,10 +728,41 @@ namespace Supermarket.Controllers
 
         #region orders
 
-        public ActionResult Orders()
+        public ActionResult Orders(string sortOrder, string currentFilter, string searchString, int? page)
         {
-            var orders = _dbContext.Orders;
-            return View(orders.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.NameSortParm = String.IsNullOrEmpty(sortOrder) ? "Date_Older" : ""; //switch back and forth between those two values.
+            //ViewBag.PriceSortParm = sortOrder == "Price" ? "Price_Desc" : "Price"; //switch back and forth between those two values.
+
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilterO = searchString;
+            var orders = _dbContext.Orders.Include(c => c.User);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                orders = orders.Where(ord => ord.User.emailAddress.Contains(searchString));
+            }
+            // sort
+            switch (sortOrder)
+            {
+                case "Date_Older":
+                    orders = orders.OrderBy(ord => ord.checkoutTime);
+                    break;
+                default:
+                    orders = orders.OrderByDescending(ord => ord.checkoutTime);
+                    break;
+            }
+
+            // pagination
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+            return View(orders.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult OrderDetails(long orderId)
