@@ -1,0 +1,77 @@
+﻿@model PagedList.IPagedList<Supermarket.Models.User>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
+
+@{
+    ViewBag.Title = "Users";
+}
+
+<h1>Users:</h1>
+@using (Html.BeginForm("Users", "Manager", FormMethod.Get))
+{
+    <div class="row align-items-center">
+        <p class="p-2">@Html.TextBox("SearchString", ViewBag.CurrentFilterO as string)</p>
+        <p class="p-2">@Html.DropDownList("types", null, "All", htmlAttributes: new { @class = "form-control", id = "type", name = "type", dir = "rtl" })</p>
+        <p class="p-2"><input type="submit" value="Filter" /></p>
+        <p class="p-2">@Html.ActionLink("Clear", "Users")</p>
+    </div>
+}
+
+@if (ViewBag.currentFilter != null)
+{
+    <br />
+    <h4>results for: "@ViewBag.currentFilterO"</h4>
+    <br />
+}
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.ActionLink("First name", "Users", new { sortOrder = ViewBag.FNameSortParm, currentFilter = ViewBag.CurrentFilterO, types = ViewBag.CurrentType })
+        </th>
+        <th>
+            @Html.ActionLink("Last name", "Users", new { sortOrder = ViewBag.LNameSortParm, currentFilter = ViewBag.CurrentFilterO, types = ViewBag.CurrentType })
+        </th>
+        <th>
+            Email Address
+        </th>
+        <th>
+            Phone number
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.firstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.lastName)
+            </td>
+            <td>
+                @Html.ActionLink(item.emailAddress, "UserDetails", "manager", new { id = item.userID }, new { })
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.phone)
+            </td>
+        </tr>
+    }
+</table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+<div class="pagination-center">
+    @Html.PagedListPager(Model, page => Url.Action("Users",
+    new
+    {
+        page,
+        sortOrder = ViewBag.CurrentSort,
+        currentFilter = ViewBag.CurrentFilterO,
+        types = ViewBag.CurrentType
+    }),
+    PagedListRenderOptions.ClassicPlusFirstAndLast)
+</div>
+<p class="p-2">
+    @Html.ActionLink("go back", "Index")
+</p>

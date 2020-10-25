@@ -52,7 +52,7 @@
           <Property Name="userID" Type="uniqueidentifier" Nullable="false" />
           <Property Name="checkoutTime" Type="datetime" Nullable="false" />
           <Property Name="checkoutTotal" Type="money" Nullable="false" />
-          <Property Name="orderId" Type="bigint" Nullable="false" />
+          <Property Name="orderId" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
         <EntityType Name="Permission">
           <Key>
@@ -72,6 +72,7 @@
           <Property Name="stock" Type="int" Nullable="false" />
           <Property Name="category" Type="int" Nullable="false" />
           <Property Name="ImageID" Type="uniqueidentifier" />
+          <Property Name="available" Type="int" />
         </EntityType>
         <EntityType Name="ProductImage">
           <Key>
@@ -367,7 +368,7 @@
           <Property Name="userID" Type="Guid" Nullable="false" />
           <Property Name="checkoutTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="checkoutTotal" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
-          <Property Name="orderId" Type="Int64" Nullable="false" />
+          <Property Name="orderId" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Order_Product" Relationship="SupermarketModel.FK_Order_Product_Orders" FromRole="Order" ToRole="Order_Product" />
           <NavigationProperty Name="User" Relationship="SupermarketModel.FK_Orders_Users" FromRole="Order" ToRole="User" />
         </EntityType>
@@ -390,6 +391,7 @@
           <Property Name="stock" Type="Int32" Nullable="false" />
           <Property Name="category" Type="Int32" Nullable="false" />
           <Property Name="ImageID" Type="Guid" />
+          <Property Name="available" Type="Int32" />
           <NavigationProperty Name="Carts" Relationship="SupermarketModel.FK_Cart_Product" FromRole="Product" ToRole="Cart" />
           <NavigationProperty Name="Category1" Relationship="SupermarketModel.FK_Product_Category" FromRole="Product" ToRole="Category" />
           <NavigationProperty Name="Order_Product" Relationship="SupermarketModel.FK_Order_Product_Product" FromRole="Product" ToRole="Order_Product" />
@@ -612,6 +614,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="SupermarketModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="available" ColumnName="available" />
                 <ScalarProperty Name="ImageID" ColumnName="ImageID" />
                 <ScalarProperty Name="category" ColumnName="category" />
                 <ScalarProperty Name="stock" ColumnName="stock" />

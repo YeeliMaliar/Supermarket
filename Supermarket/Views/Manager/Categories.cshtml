@@ -28,8 +28,8 @@
 <p>
     @Html.ActionLink("Create New", "AddCategory")
 </p>
-<table class="table">
-    <tr>
+<table class="table table-bordered">
+    <tr class="thead-light">
         <th>
             Name
         </th>
@@ -51,8 +51,7 @@
                 </div>
             </td>
             <td>
-                @Html.ActionLink("Edit", "EditCategory", new { id = item.categoryID }) |
-                @Html.ActionLink("Delete", "DeleteCategory", new { id = item.categoryID })
+                @Html.ActionLink("Edit", "EditCategory", new { id = item.categoryID })
             </td>
         </tr>
     }

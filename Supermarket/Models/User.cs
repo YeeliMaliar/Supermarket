@@ -44,7 +44,7 @@ namespace Supermarket.Models
         public string passwordSalt { get; set; }
         public int usertype { get; set; }
         public System.Guid addressID { get; set; }
-    
+
         public virtual Address Address { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Order> Orders { get; set; }

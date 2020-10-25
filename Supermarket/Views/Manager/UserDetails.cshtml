@@ -1,0 +1,50 @@
+﻿@model Supermarket.Models.User
+
+@{
+    ViewBag.Title = "User Details";
+}
+
+<h2>@Model.firstName @Model.lastName</h2>
+
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.emailAddress):
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.emailAddress)
+        </dd>
+
+        <dt>
+            Phone number:
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address):
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address.city), House no. @Html.DisplayFor(model => model.Address.houseNumber), apartment @Html.DisplayFor(model => model.Address.houseNumber), floor @Html.DisplayFor(model => model.Address.floor).
+            <br />
+            Postal code: @Html.DisplayFor(model => model.Address.postalCode)
+        </dd>
+
+        <dt>
+            User type: 
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Permission.TypeName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "Users")
+</p>

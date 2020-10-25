@@ -38,6 +38,7 @@ namespace Supermarket.Controllers
             }
             ViewBag.CurrentFilter = searchString;
             var products = _dbContext.Products.Include(p => p.Category1);
+            products = products.Where(e => e.available != 0);
             if (!String.IsNullOrEmpty(searchString))
             {
                 products = products.Where(prd => prd.name.Contains(searchString)
@@ -76,7 +77,7 @@ namespace Supermarket.Controllers
             }
 
             // pagination
-            int pageSize = 10;
+            int pageSize = 8;
             int pageNumber = (page ?? 1);
             return View(products.ToPagedList(pageNumber, pageSize));
         }

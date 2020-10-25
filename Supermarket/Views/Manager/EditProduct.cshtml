@@ -9,9 +9,8 @@
 @using (Html.BeginForm("EditProduct", "Manager", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
-    
+
 <div class="form-horizontal">
-    <h2>Edit:</h2>
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.product.productID)
@@ -53,21 +52,23 @@
             @Html.ValidationMessageFor(model => model.category, "", new { @class = "text-danger" })
         </div>
     </div>
-
+    <br />
     <div class="form-group">
         @Html.TextBox("picture", "", new { type = "file" })
         <br />
         @ViewBag.FileMessage
     </div>
-
+    <br />
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
-            <input type="submit" value="Save" class="btn btn-default" />
+            <input type="submit" value="Save" class="btn btn-default btn-outline-primary" />
         </div>
     </div>
+
 </div>
 }
 
 <div>
     @Html.ActionLink("Back to List", "Products")
 </div>
+<br />

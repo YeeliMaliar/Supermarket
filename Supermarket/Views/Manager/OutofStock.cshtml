@@ -22,8 +22,8 @@
     <h4>results for: "@ViewBag.currentFilterO"</h4>
     <br />
 }
-<table class="table">
-    <tr>
+<<table class="table table-bordered">
+    <tr class="thead-light">
         <th>
             @Html.ActionLink("Name", "OutofStock", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilterO, category = ViewBag.CurrentCategory })
         </th>

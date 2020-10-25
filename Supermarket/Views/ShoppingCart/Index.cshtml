@@ -3,10 +3,12 @@
     ViewBag.Title = "Shopping Cart";
 }
 
-<h3>
+<h2>
     <em>Review</em> your cart:
-</h3>
-<br />
+</h2>
+
+<p class="text-danger">@ViewBag.StockMessage</p>
+
 <div id="update-message">
 </div>
 <table class="table table-striped table-bordered">
@@ -20,6 +22,7 @@
         <th>
             Quantity
         </th>
+        <th>In stock</th>
         <th></th>
     </tr>
     @foreach (var item in Model.CartItems)
@@ -32,7 +35,10 @@
                 @String.Format("{0:F}", item.Product.price)
             </td>
             <td id="item-count-@item.RecordId">
-                <input type="number" class="qty-@item.RecordId" value=@item.count min=0 id="item-county-@item.RecordId"/>
+                <input type="number" class="qty-@item.RecordId" value=@item.count min=0 id="item-county-@item.RecordId" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Product.stock)
             </td>
             <td>
                 <a href="#" class="UpdateLink" data-id="@item.RecordId">
@@ -45,15 +51,16 @@
         <td>
             Total
         </td>
-        <td colspan=2>
+        <td colspan=3>
         </td>
         <td id="cart-total">
             @String.Format("{0:F}", Model.CartTotal)
         </td>
     </tr>
 </table>
+<div id="snackbar">Added to cart</div>
 <p class="button">
-    @Html.ActionLink("Checkout >> ", "Payment", "Checkout", new { @class = "btn btn-default btn-outline-primary" })
+    @Html.ActionLink("Checkout >> ", "Checkout",new { } , new { @class = "btn btn-default btn-outline-primary" })
 </p>
 
 @section scripts
@@ -75,10 +82,16 @@
                             // Update the page elements
                             if (data.ItemCount == 0) {
                                 $('#row-' + data.DeleteId).fadeOut('slow');
-                            } 
+                            }
+                            var bar = document.getElementById("snackbar");
+                            $('#snackbar').text(data.Message);
+                            // Add the "show" class to DIV
+                            bar.className = "show";
+
+                            // After 3 seconds, remove the show class from DIV
+                            setTimeout(function () { bar.className = bar.className.replace("show", ""); }, 3000);
+
                             $('#cart-total').text(data.CartTotal);
-                            $('#update-message').text(data.Message);
-                            $('#cart-status').text('Cart (' + data.CartCount + ')');
                         });
                 }
             });

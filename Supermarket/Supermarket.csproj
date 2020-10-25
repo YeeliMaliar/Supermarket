@@ -146,6 +146,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\PaymentModel.cs" />
     <Compile Include="Models\Address.cs">
       <DependentUpon>DB_Model.tt</DependentUpon>
     </Compile>
@@ -412,6 +413,10 @@
     <Content Include="Views\Manager\OutofStock.cshtml" />
     <Content Include="Views\Manager\AddStockO.cshtml" />
     <Content Include="Views\Manager\DeleteProductO.cshtml" />
+    <Content Include="Views\ShoppingCart\CheckOut.cshtml" />
+    <Content Include="Views\ShoppingCart\OrderComplete.cshtml" />
+    <Content Include="Views\Manager\Users.cshtml" />
+    <Content Include="Views\Manager\UserDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -125,7 +125,7 @@ namespace Supermarket.Models
             return total ?? decimal.Zero;
         }
 
-        public long CreateOrder(Order order)
+        public Order CreateOrder(Order order)
         {
             decimal orderTotal = 0;
 
@@ -139,23 +139,21 @@ namespace Supermarket.Models
                     productID = item.ProductId,
                     orderId = order.orderId,
                     unitPrice = item.Product.price,
-                    quantity = item.count
+                    quantity = item.count,
+                    orderProductID = Guid.NewGuid()
+                    
                 };
                 // Set the order total of the shopping cart
                 orderTotal += (item.count * item.Product.price);
-
                 _dbContext.Order_Product.Add(orderDetail);
 
             }
             // Set the order's total to the orderTotal count
             order.checkoutTotal = orderTotal;
-
-            // Save the order
-            _dbContext.SaveChanges();
             // Empty the shopping cart
             EmptyCart();
             // Return the OrderId as the confirmation number
-            return order.orderId;
+            return order;
         }
 
         public string GetCartId(HttpContextBase context)

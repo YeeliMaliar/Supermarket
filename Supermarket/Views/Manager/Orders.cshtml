@@ -23,8 +23,8 @@
         <br />
     }
 
-    <table class="table">
-        <tr>
+    <table class="table table-bordered">
+        <tr class="thead-light">
             <th>
                 Order ID
             </th>
@@ -53,10 +53,10 @@
                     @Html.DisplayFor(modelItem => item.checkoutTotal)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.User.emailAddress)
+                    @Html.ActionLink(item.User.emailAddress, "UserDetails", "manager", new { id = item.userID }, new { })
                 </td>
                 <td>
-                    @Html.ActionLink("Details", "OrderDetails", new { id = item.orderId })
+                    @Html.ActionLink("Details", "OrderDetails", new { orderid = item.orderId })
                 </td>
             </tr>
         }

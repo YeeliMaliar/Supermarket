@@ -7,8 +7,8 @@ namespace Supermarket.Models
 {
     public class AddStock
     {
-        public Product product { get; set; }
+        public Product Product { get; set; }
 
-        public int added { get; set; }
+        public int Added { get; set; }
     }
 }

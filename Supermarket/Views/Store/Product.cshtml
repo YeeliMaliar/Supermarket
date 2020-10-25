@@ -5,73 +5,69 @@
 }
 
 <h1>@Model.name</h1>
+@Html.DisplayFor(model => model.Category1.categoryName)
+<hr />
 
-<div>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.price)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.price)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.description)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.description)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.stock)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.stock)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Category1.categoryName)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Category1.categoryName)
-        </dd>
-
-        <dt>
-            image
-            
-        </dt>
-
-        <dd>
-            <br />
-            <div style="height: 270px; width: 270px; border: 2px solid grey; border-radius:5px;">
-                <img src="~/Content/productImages/@Model.ProductImage.imageName"
-                     alt="@Model.ProductImage.imageName"
-                     style="max-width: 100%; max-height: 100%;" />
-            </div>
-        </dd>
-
-    </dl>
-    <div class="row align-items-center">
-        <a href="#" class="AddLink btn btn-default btn-outline-success p-2" data-id="@Model.productID">
-            add
-        </a>
-        <div id="item-amount" class="p-2">
-            <input type="number" value=1 min=1 id="item-qty" style="width:60px; height:40px;" />
+<div class="row">
+    <div class="col-md-4">
+        <div style="border: 2px solid grey; border-radius:5px;">
+            <img src="~/Content/productImages/@Model.ProductImage.imageName"
+                 alt="@Model.ProductImage.imageName"
+                 style="width: 100%; height: 300px; object-fit: contain;" class="img-fluid" />
         </div>
     </div>
-    <div id="update-message">
+    <div class="col-md-8">
+        <p><b>price:</b> @string.Format("{0:0.00}", Model.price) ₪</p>
+        <dl class="dl-horizontal">
+            @if (!string.IsNullOrWhiteSpace(Model.description))
+            {
+                <dt>
+                    description
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.description)
+                </dd>
+            }
+        </dl>
+
+        <div class="row align-items-center">
+            <div id="item-amount" class="p-2">
+                <input type="number" value=1 min=1 id="item-qty" style="width:60px; height:40px;" />
+            </div>
+            @if (Model.stock <= 0 || Model.available != 1)
+            {
+                <button class="AddLink btn btn-default btn-outline-success p-2" data-id="@Model.productID" disabled>
+                    add
+                </button>
+            }
+            else
+            {
+                <button class="AddLink btn btn-default btn-outline-success p-2" data-id="@Model.productID">
+                    add
+                </button>
+            }
+        </div>
+        @if (Model.stock <= 0)
+        {
+            <p class="text-danger p-2">
+                out of stock
+            </p>
+        }
+        else if (Model.available != 1)
+        {
+            <p class="text-danger p-2">
+                product unavailable
+            </p>
+        }
     </div>
 </div>
 <br />
 <p>
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to Store", "Index")
 </p>
 <br />
+<div id="snackbar">Added to cart</div>
 
 @section scripts
 {
@@ -88,7 +84,13 @@
                     // Perform the ajax post
                     $.post("/ShoppingCart/AddToCart", { "id": ItemToAdd, "qty": number },
                         function (data) {
-                            $('#update-message').text(data);
+                            var bar = document.getElementById("snackbar");
+
+                            // Add the "show" class to DIV
+                            bar.className = "show";
+
+                            // After 3 seconds, remove the show class from DIV
+                            setTimeout(function () { bar.className = bar.className.replace("show", ""); }, 3000);
                         });
                 }
             });

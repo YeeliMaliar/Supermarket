@@ -40,6 +40,7 @@ namespace Supermarket.Models
         [Display(Name = "Categoty number")]
         public int category { get; set; }
         public Nullable<System.Guid> ImageID { get; set; }
+        public Nullable<int> available { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cart> Carts { get; set; }

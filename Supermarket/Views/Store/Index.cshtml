@@ -15,70 +15,49 @@
         <p class="p-2">@Html.ActionLink("Clear", "Index")</p>
     </div>
 }
-
 @if (ViewBag.currentFilter != null)
 {
-    <br />
     <h4>results for: "@ViewBag.currentFilter"</h4>
     <br />
 }
+<div>
+    <h5>Sort: </h5>
+    @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory }) |
+    @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory }) |
+    @Html.ActionLink("Stock", "Index", new { sortOrder = ViewBag.StockSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory })
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.ActionLink("Name", "Index", new { sortOrder = ViewBag.NameSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory })
-        </th>
-        <th>
-            @Html.ActionLink("Price", "Index", new { sortOrder = ViewBag.PriceSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory })
-        </th>
-        <th>
-            @Html.ActionLink("Stock", "Index", new { sortOrder = ViewBag.StockSortParm, currentFilter = ViewBag.CurrentFilter, category = ViewBag.CurrentCategory })
-        </th>
-        <th>
-            Category
-        </th>
-        <th>
-            Image
-        </th>
-    </tr>
-
+</div>
+<br />
+<div class="row">
+    
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.stock)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category1.categoryName)
-            </td>
-            <td>
-                <a href="@Url.Action("Product", "Store", new { id = item.productID })">
-                    <div style="height:180px; width:180px;">
-                        <img src="~/Content/productImages/@item.ProductImage.imageName" alt="@item.ProductImage.imageName" style="max-width: 100%; max-height: 100%;" />
-                    </div>
-                </a>
-            </td>
-        </tr>
+    <div class="col-sm-6 col-lg-3">
+        <div class="card" style="padding: 20px; margin-bottom: 30px;">
+            <a href="@Url.Action("Product","Store", new { id = item.productID })">
+                <img alt="@item.ProductImage.imageName" class="img-fluid" src="~/Content/productImages/@item.ProductImage.imageName" style=" width: 100%; height: 200px; object-fit:contain;" />
+            </a>
+            <div class="card-block">
+                <br />
+                <h4 align="right" class="card-title">@item.name</h4>
+                <p align="right" class="card-text">@item.Category1.categoryName</p>
+                <p align="left" class="card-subtitle">@string.Format("{0:0.00}", item.price) ₪</p>
+            </div>
+        </div>
+    </div>
     }
-
-</table>
-<br />
-Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
-
-<div class="pagination-center">
-    @Html.PagedListPager(Model, page => Url.Action("Index",
-    new
-        {
-        page,
-        sortOrder = ViewBag.CurrentSort,
-        currentFilter = ViewBag.CurrentFilter,
-        category = ViewBag.CurrentCategory
-        }),
-    PagedListRenderOptions.ClassicPlusFirstAndLast)
 </div>
+    <br />
+    Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+    <div class="pagination-center">
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new
+            {
+            page,
+            sortOrder = ViewBag.CurrentSort,
+            currentFilter = ViewBag.CurrentFilter,
+            category = ViewBag.CurrentCategory
+            }),
+        PagedListRenderOptions.ClassicPlusFirstAndLast)
+    </div>
